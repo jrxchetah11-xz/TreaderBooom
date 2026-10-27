@@ -48,7 +48,21 @@
             overflow-x: hidden;
         }
 
-        /* App Container mimicking Telegram Mini App */
+        /* Telegram-Only Blocker Screen */
+        .tg-only-overlay {
+            position: fixed;
+            inset: 0;
+            background: #0a0612;
+            z-index: 10000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            text-align: center;
+        }
+
+        /* App Container */
         .app-container {
             width: 100%;
             max-width: 480px;
@@ -442,26 +456,24 @@
         .circular-timer-wrapper {
             display: none;
             align-items: center;
-            justify-content: flex-start;
-            gap: 10px;
+            justify-content: center;
             background: rgba(138, 92, 246, 0.12);
             border: 1px solid rgba(138, 92, 246, 0.4);
             border-radius: 14px;
-            padding: 6px 10px;
+            padding: 4px 6px;
             width: fit-content;
-            animation: pulse-border 1.5s infinite alternate;
         }
 
         .circle-svg-box {
             position: relative;
-            width: 40px;
-            height: 40px;
+            width: 38px;
+            height: 38px;
         }
 
         .circle-svg-box svg {
             transform: rotate(-90deg);
-            width: 40px;
-            height: 40px;
+            width: 38px;
+            height: 38px;
         }
 
         .circle-bg {
@@ -475,7 +487,7 @@
             stroke: #a855f7;
             stroke-width: 3.5;
             stroke-linecap: round;
-            stroke-dasharray: 106.8; /* 2 * PI * 17 */
+            stroke-dasharray: 100.5; /* 2 * PI * 16 */
             stroke-dashoffset: 0;
             transition: stroke-dashoffset 1s linear, stroke 0.3s;
         }
@@ -491,10 +503,10 @@
             color: white;
         }
 
-        /* Chart Area with Reference Guideline */
+        /* Chart Area */
         .chart-container {
             width: 100%;
-            height: 175px;
+            height: 180px;
             position: relative;
             margin: 6px 0;
         }
@@ -502,68 +514,6 @@
         canvas#priceChart {
             width: 100%;
             height: 100%;
-        }
-
-        .chart-guideline-badge {
-            position: absolute;
-            right: 8px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(15, 10, 30, 0.85);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 2px 7px;
-            border-radius: 6px;
-            font-size: 0.65rem;
-            font-weight: 700;
-            pointer-events: none;
-            z-index: 5;
-        }
-
-        .chart-footer {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 0.7rem;
-            color: #10b981;
-            margin-top: 4px;
-        }
-
-        .dot-live {
-            width: 6px;
-            height: 6px;
-            background: #10b981;
-            border-radius: 50%;
-            box-shadow: 0 0 8px #10b981;
-        }
-
-        .live-ticker {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            margin-top: 8px;
-        }
-
-        .live-badge {
-            background: #ef4444;
-            color: white;
-            font-size: 0.65rem;
-            font-weight: 800;
-            padding: 3px 8px;
-            border-radius: 10px;
-            text-transform: uppercase;
-        }
-
-        .ticker-item {
-            font-size: 0.72rem;
-            color: var(--text-muted);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .ticker-highlight {
-            color: #10b981;
-            font-weight: 700;
         }
 
         .online-stats {
@@ -588,6 +538,14 @@
             color: white;
         }
 
+        .dot-live {
+            width: 6px;
+            height: 6px;
+            background: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #10b981;
+        }
+
         /* Stake Controls Card */
         .stake-header {
             display: flex;
@@ -606,24 +564,21 @@
             background: rgba(0,0,0,0.25);
             border: 1px solid rgba(138, 92, 246, 0.3);
             border-radius: 14px;
-            padding: 8px 14px;
+            padding: 10px 14px;
         }
 
-        .stake-manual-input {
-            width: 140px;
-            background: transparent;
-            border: none;
+        .stake-amount-display {
             font-size: 1.8rem;
             font-weight: 800;
             color: white;
+            min-width: 110px;
             text-align: center;
-            outline: none;
         }
 
-        /* Preset Stake Chips */
+        /* Fixed Preset Stake Chips */
         .preset-chips {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(5, 1fr);
             gap: 6px;
             margin-top: 8px;
         }
@@ -647,24 +602,17 @@
         }
 
         /* Action Buttons: Rise / Fall */
-        .win-payout-info {
-            text-align: center;
-            font-size: 0.72rem;
-            color: #10b981;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
         .action-buttons {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
+            margin-top: 6px;
         }
 
         .btn-predict {
             border: none;
             border-radius: 14px;
-            padding: 12px;
+            padding: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -697,23 +645,7 @@
             display: block;
         }
 
-        .trade-cancel-btn {
-            margin-top: 10px;
-            width: 100%;
-            padding: 10px;
-            border: 1px solid rgba(248,113,113,.35);
-            background: rgba(239,68,68,.09);
-            color: #fca5a5;
-            border-radius: 11px;
-            font-weight: 700;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            cursor: pointer;
-        }
-
-        /* IN-PAGE MY HISTORY (Below Rise/Fall) */
+        /* IN-PAGE MY HISTORY */
         .my-history-section {
             margin-top: 6px;
         }
@@ -1260,7 +1192,7 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        /* UPGRADED TRADE RESULT MODAL */
+        /* TRADE RESULT MODAL */
         .result-overlay {
             position: fixed;
             inset: 0;
@@ -1470,6 +1402,20 @@
     </style>
 </head>
 <body>
+
+    <!-- TELEGRAM ONLY BLOCKER OVERLAY -->
+    <div id="tgGateOverlay" class="tg-only-overlay">
+        <div style="width: 75px; height: 75px; border-radius: 50%; background: linear-gradient(135deg, #229ed9, #0088cc); display: flex; align-items: center; justify-content: center; font-size: 38px; color: white; margin-bottom: 20px; box-shadow: 0 0 35px rgba(34,158,217,0.6);">
+            <i class="fa-brands fa-telegram"></i>
+        </div>
+        <h2 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 8px;">Telegram Mini App Required</h2>
+        <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.6; max-width: 320px; margin-bottom: 24px;">
+            TreaderBooom is exclusively built to run inside Telegram. Please open the bot via Telegram to trade and access your account.
+        </p>
+        <button class="btn-cyan" style="width: 100%; max-width: 280px; padding: 14px; font-weight: 800; background: linear-gradient(135deg, #229ed9, #0088cc); box-shadow: 0 4px 18px rgba(34, 158, 217, 0.4);" onclick="openTelegramBot()">
+            LAUNCH IN TELEGRAM
+        </button>
+    </div>
 
     <!-- 1. SPLASH SCREEN -->
     <div id="splashScreen" class="splash-screen">
@@ -1713,7 +1659,6 @@
             <section id="tab-predict" class="tab-section active">
                 <div class="card">
                     <div class="pair-selector">
-                        <!-- Left side: Pair Dropdown + Circular Countdown Timer right below it -->
                         <div class="pair-selector-left">
                             <div class="pair-dropdown" onclick="openPairSheet()">
                                 <div class="coin-icon" id="activePairIcon" style="background: #f7931a;"><i class="fa-brands fa-bitcoin"></i></div>
@@ -1723,18 +1668,14 @@
                                 </div>
                             </div>
 
-                            <!-- Circular Countdown Timer (Positioned on the Left, right below Pair) -->
+                            <!-- Circular Countdown Timer (Left under Pair, no trade direction shown) -->
                             <div id="circularTimerBox" class="circular-timer-wrapper">
                                 <div class="circle-svg-box">
                                     <svg>
-                                        <circle class="circle-bg" cx="20" cy="20" r="17"></circle>
-                                        <circle id="circleProgressRing" class="circle-progress" cx="20" cy="20" r="17"></circle>
+                                        <circle class="circle-bg" cx="19" cy="19" r="16"></circle>
+                                        <circle id="circleProgressRing" class="circle-progress" cx="19" cy="19" r="16"></circle>
                                     </svg>
                                     <div id="circularTimerSeconds" class="timer-text-inside">60s</div>
-                                </div>
-                                <div>
-                                    <div style="font-size: 0.68rem; color: var(--text-muted); line-height: 1.1;">In progress</div>
-                                    <div id="circularTimerDirection" style="font-weight: 800; font-size: 0.8rem; color: #10b981;">RISE (x1.8)</div>
                                 </div>
                             </div>
                         </div>
@@ -1746,34 +1687,19 @@
                         </div>
                     </div>
 
-                    <!-- Chart Container with Guideline Reference -->
+                    <!-- Clean Chart Container without Baseline Tag or Indicators -->
                     <div class="chart-container">
                         <canvas id="priceChart"></canvas>
-                        <div id="chartGuidelineBadge" class="chart-guideline-badge">BASELINE: <span id="baselinePriceText">--</span></div>
                     </div>
 
-                    <div class="chart-footer">
-                        <div style="display:flex;align-items:center;gap:6px;">
-                            <div class="dot-live"></div>
-                            Real-time market feed
-                        </div>
-                        <div id="chartIndicatorText" style="font-weight: 700; color: #10b981;">AT BASELINE</div>
-                    </div>
-
-                    <div class="live-ticker">
-                        <span class="live-badge">LIVE</span>
-                        <div class="ticker-item">
-                            MO*** <span class="ticker-highlight"><i class="fa-solid fa-caret-up"></i> BTC +0.43 USDT</span>
-                        </div>
-                    </div>
-
+                    <!-- Online Stats Counter -->
                     <div class="online-stats">
                         <div class="stat-pill"><div class="dot-live"></div> <strong id="statOnlineNow">1,258</strong> online now</div>
                         <div class="stat-pill"><strong id="statLivePredictions">564</strong> live predictions</div>
                     </div>
                 </div>
 
-                <!-- Stake Controls Card -->
+                <!-- Stake Controls Card (Fixed Chips only, Custom Input Removed) -->
                 <div class="card">
                     <div class="stake-header">
                         <span>STAKE AMOUNT</span>
@@ -1782,23 +1708,21 @@
 
                     <div class="stake-input-container">
                         <div class="usdt-icon" style="width: 22px; height: 22px;"><i class="fa-solid fa-t"></i></div>
-                        <input type="number" step="0.001" id="stakeInput" class="stake-manual-input" value="0.03" oninput="onManualStakeInput(this.value)">
+                        <div id="stakeDisplay" class="stake-amount-display">0.05</div>
                         <span style="font-weight: 700; font-size: 0.85rem; color: var(--text-muted);">USDT</span>
                     </div>
 
                     <div class="preset-chips">
-                        <div class="chip" onclick="setStake(0.010)">0.010</div>
-                        <div class="chip" onclick="setStake(0.020)">0.020</div>
-                        <div class="chip active" onclick="setStake(0.03)">0.03</div>
-                        <div class="chip" onclick="setStake(0.05)">0.05</div>
+                        <div class="chip active" onclick="setStake(0.05)">0.05</div>
+                        <div class="chip" onclick="setStake(0.10)">0.10</div>
+                        <div class="chip" onclick="setStake(0.20)">0.20</div>
+                        <div class="chip" onclick="setStake(0.30)">0.30</div>
+                        <div class="chip" onclick="setStake(0.50)">0.50</div>
                     </div>
                 </div>
 
-                <button id="cancelTradeBtn" class="trade-cancel-btn" onclick="cancelTrade()"><i class="fa-solid fa-ban"></i> CANCEL TRADE</button>
-
-                <!-- Action Controls -->
+                <!-- Action Controls (Rise / Fall only, Cancel Button & Payout text removed) -->
                 <div>
-                    <div class="win-payout-info">Estimated payout: <strong id="potentialWin">+0.054 USDT</strong></div>
                     <div class="action-buttons">
                         <button class="btn-predict btn-rise" onclick="startTrade('RISE')">
                             <i class="fa-solid fa-arrow-trend-up" style="font-size: 20px;"></i>
@@ -1827,7 +1751,7 @@
                         <span style="font-size: 0.65rem; color: var(--text-sub);">Recent Predictions</span>
                     </div>
                     <div id="inPageHistoryList" class="my-history-list">
-                        <!-- Dynamically filled with predictions -->
+                        <!-- Dynamically populated with predictions -->
                     </div>
                 </div>
             </section>
@@ -1856,7 +1780,6 @@
                         <span style="background: #f59e0b; color: #000; font-size: 0.65rem; font-weight: 800; padding: 2px 6px; border-radius: 6px;">BEP20</span>
                     </div>
 
-                    <!-- Deposit QR Code (Updated to your QR) -->
                     <div class="qr-container">
                         <div class="qr-img-box">
                             <img src="qr.png" alt="Deposit QR Code" id="depositQrCodeImg" onerror="this.onerror=null; this.src='qr.png'">
@@ -1868,7 +1791,6 @@
                         <i class="fa-regular fa-copy" style="cursor: pointer; color: var(--text-muted); font-size: 1rem; padding: 4px;" onclick="copyAddress()"></i>
                     </div>
 
-                    <!-- Action Buttons: COPY ADDRESS (Fixed & Working 100%) -->
                     <div class="btn-action-row">
                         <button class="btn-cyan" onclick="copyAddress()"><i class="fa-regular fa-copy"></i> COPY ADDRESS</button>
                         <button class="btn-outline" onclick="window.open('https://bscscan.com/address/0x9e04F712817168066Efc0F5F53488F78Fa206B18', '_blank')">VIEW ON BSCSCAN</button>
@@ -1985,6 +1907,22 @@
                     </button>
                 </div>
 
+                <!-- NEW: GIFT CODE REDEEM SECTION (No demo codes shown) -->
+                <div class="card">
+                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+                        <i class="fa-solid fa-gift" style="color: #10b981; font-size: 1.1rem;"></i>
+                        <strong style="font-size: 0.85rem;">Redeem Gift Code</strong>
+                    </div>
+                    <div class="form-group" style="margin-top:0;">
+                        <div class="input-wrapper">
+                            <input type="text" id="giftCodeInput" class="form-input" placeholder="Enter Gift Code" style="text-transform: uppercase;">
+                        </div>
+                    </div>
+                    <button class="btn-cyan" style="width: 100%; margin-top: 10px; background: linear-gradient(135deg, #10b981, #059669);" onclick="redeemGiftCode()">
+                        REDEEM GIFT CODE
+                    </button>
+                </div>
+
                 <div class="card community-card">
                     <div style="display: flex; align-items: center; gap: 10px;">
                         <div style="width: 36px; height: 36px; background: #229ed9; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; color: white;">
@@ -1995,7 +1933,7 @@
                             <span style="font-size: 0.65rem; color: var(--text-muted);">News, chat with traders & signals</span>
                         </div>
                     </div>
-                    <button class="btn-cyan" style="padding: 6px 12px; font-size: 0.7rem;" onclick="window.open('https://t.me/TreaderBoom', '_blank')">Join group</button>
+                    <button class="btn-cyan" style="padding: 6px 12px; font-size: 0.7rem;" onclick="window.open('https://t.me/TreaderBoom', '_blank')">Join Now</button>
                 </div>
 
                 <div class="commission-grid">
@@ -2017,13 +1955,6 @@
                         <div class="comm-meta">Level 3</div>
                         <div class="comm-meta" style="color: white; font-weight: 700; margin-top: 2px;">+0.00 USDT</div>
                     </div>
-                </div>
-
-                <div class="card">
-                    <h4 style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-sub); margin-bottom: 6px;">HOW MUCH YOU CAN EARN</h4>
-                    <p style="font-size: 0.72rem; color: var(--text-muted); line-height: 1.4;">
-                        Example: your friend stakes <strong>10.00 USDT</strong> on Rise or Fall and you instantly receive <strong>0.10 USDT</strong>, whether they win or lose.
-                    </p>
                 </div>
             </section>
 
@@ -2070,7 +2001,7 @@
     <!-- Application Logic Script -->
     <script>
         // ==========================================
-        // CONFIGURATION: Set your Telegram Bot Username here
+        // CONFIGURATION: Set your Telegram Bot Username
         // ==========================================
         const BOT_USERNAME = "TreaderBooom_bot";
 
@@ -2091,18 +2022,18 @@
         // Application State
         let state = {
             balance: 0.00,
-            stake: 0.03,
+            stake: 0.05, // Default stake updated to 0.05
             currentPrice: CRYPTO_PAIRS['BTC/USDT'].price,
             baselinePrice: CRYPTO_PAIRS['BTC/USDT'].price,
             priceHistory: [],
             activeTrade: null,
-            // Silent Account Gates
-            isAccountActive: false, // Activated automatically upon first deposit
+            isAccountActive: false,
             turnoverCompleted: 0.00,
             turnoverRequired: 0.00,
             highestDeposit: 0.00,
             isBonusClaimed: false,
             userId: '10984218',
+            redeemedCodes: [],
             history: {
                 deposits: [],
                 predictions: [],
@@ -2110,7 +2041,22 @@
             }
         };
 
-        // Load Persisted User Profile from Local Storage
+        // Telegram Only Environment Check
+        function checkTelegramEnvironment() {
+            const tg = window.Telegram?.WebApp;
+            const isInsideTg = tg && (tg.initData || (tg.platform && tg.platform !== 'unknown'));
+            if (!isInsideTg) {
+                document.getElementById('tgGateOverlay').style.display = 'flex';
+                return false;
+            }
+            return true;
+        }
+
+        function openTelegramBot() {
+            window.location.href = `https://t.me/${BOT_USERNAME}`;
+        }
+
+        // Load Persisted User Profile
         function loadStoredUserData() {
             try {
                 const saved = localStorage.getItem('treaderbooom_user_profile');
@@ -2123,6 +2069,7 @@
                     state.highestDeposit = data.highestDeposit ?? 0.00;
                     state.isBonusClaimed = !!data.isBonusClaimed;
                     state.userId = data.userId || state.userId;
+                    state.redeemedCodes = data.redeemedCodes || [];
                     if (data.history) state.history = data.history;
                 }
             } catch (e) {
@@ -2140,6 +2087,7 @@
                     highestDeposit: state.highestDeposit,
                     isBonusClaimed: state.isBonusClaimed,
                     userId: state.userId,
+                    redeemedCodes: state.redeemedCodes,
                     history: state.history
                 };
                 localStorage.setItem('treaderbooom_user_profile', JSON.stringify(dataToSave));
@@ -2149,12 +2097,14 @@
         }
 
         // ==========================================
-        // INITIALIZATION & ONBOARDING (Splash & Auth)
+        // INITIALIZATION
         // ==========================================
         window.addEventListener('DOMContentLoaded', () => {
+            // Verify Telegram mini app restriction
+            checkTelegramEnvironment();
+
             loadStoredUserData();
 
-            // Extract Telegram WebApp User if available
             const tg = window.Telegram?.WebApp;
             if (tg) {
                 tg.ready();
@@ -2162,25 +2112,20 @@
                 if (tg.initDataUnsafe?.user?.id) {
                     state.userId = String(tg.initDataUnsafe.user.id);
                 }
-            } else {
-                if (!localStorage.getItem('treaderbooom_user_profile')) {
-                    state.userId = String(Math.floor(10000000 + Math.random() * 90000000));
-                }
             }
 
-            // Update Dynamic Referral Link
             updateReferralLinkUI();
 
-            // Seed Price History for chart
+            // Populate stable price history
+            state.priceHistory = [];
             for (let i = 0; i < 30; i++) {
-                state.priceHistory.push(state.currentPrice + (Math.random() - 0.49) * (state.currentPrice * 0.0005));
+                state.priceHistory.push(state.currentPrice + (Math.random() - 0.49) * (state.currentPrice * 0.0004));
             }
 
             resizeCanvas();
             updateBalanceUI();
             renderInPageHistory();
 
-            // Splash Screen Timer (2 seconds)
             setTimeout(() => {
                 const splash = document.getElementById('splashScreen');
                 splash.classList.add('hide');
@@ -2190,7 +2135,6 @@
                 }
             }, 2100);
 
-            // Start Live Stats random fluctuation every 1 minute
             startStatsFluctuation();
         });
 
@@ -2211,7 +2155,6 @@
             });
             saveUserData();
             updateBalanceUI();
-
             document.getElementById('bonusOverlay').classList.add('show');
         }
 
@@ -2225,18 +2168,20 @@
         }
 
         // ==========================================
-        // REAL-TIME CHART WITH HORIZONTAL BASELINE
+        // REAL-TIME CHART ENGINE (Bug Free & Dynamic Colors)
         // ==========================================
         const canvas = document.getElementById('priceChart');
         const ctx = canvas.getContext('2d');
 
         function resizeCanvas() {
-            canvas.width = canvas.parentElement.clientWidth;
-            canvas.height = canvas.parentElement.clientHeight;
+            if (canvas && canvas.parentElement) {
+                canvas.width = canvas.parentElement.clientWidth || 300;
+                canvas.height = canvas.parentElement.clientHeight || 180;
+            }
         }
         window.addEventListener('resize', resizeCanvas);
 
-        // Real-time market tick simulation
+        // Real-time market tick
         setInterval(() => {
             const volatility = state.currentPrice * 0.0002;
             const delta = (Math.random() - 0.495) * volatility;
@@ -2251,66 +2196,83 @@
         }, 1000);
 
         function drawChart() {
-            if (!canvas.width || !canvas.height) return;
+            if (!canvas.width || !canvas.height) {
+                resizeCanvas();
+                if (!canvas.width || !canvas.height) return;
+            }
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            const min = Math.min(...state.priceHistory);
-            const max = Math.max(...state.priceHistory);
-            const range = (max - min) || 1;
+            if (!state.priceHistory || state.priceHistory.length < 2) return;
 
+            let min = Math.min(...state.priceHistory);
+            let max = Math.max(...state.priceHistory);
+
+            if (min === max || !isFinite(min) || !isFinite(max)) {
+                min = state.currentPrice * 0.999;
+                max = state.currentPrice * 1.001;
+            }
+
+            const padding = (max - min) * 0.15 || state.currentPrice * 0.0004;
+            const plotMin = min - padding;
+            const plotMax = max + padding;
+            const range = (plotMax - plotMin) || 1;
+
+            // Draw Central Reference Baseline
             const baseline = state.activeTrade ? state.activeTrade.entryPrice : state.baselinePrice;
-            document.getElementById('baselinePriceText').innerText = baseline.toFixed(2);
-            
-            const baselineY = canvas.height - ((baseline - min) / range * canvas.height * 0.75 + canvas.height * 0.12);
+            const baselineY = canvas.height - ((baseline - plotMin) / range * canvas.height);
             
             ctx.beginPath();
             ctx.setLineDash([5, 5]);
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
             ctx.lineWidth = 1.5;
             ctx.moveTo(0, baselineY);
             ctx.lineTo(canvas.width, baselineY);
             ctx.stroke();
             ctx.setLineDash([]);
 
-            const indicatorEl = document.getElementById('chartIndicatorText');
-            if (state.currentPrice > baseline) {
-                indicatorEl.innerText = "ABOVE BASELINE ▲";
-                indicatorEl.style.color = "#10b981";
-            } else if (state.currentPrice < baseline) {
-                indicatorEl.innerText = "BELOW BASELINE ▼";
-                indicatorEl.style.color = "#ef4444";
-            } else {
-                indicatorEl.innerText = "AT BASELINE";
-                indicatorEl.style.color = "#94a3b8";
+            // 1. Dynamic Chart Candle Color based on User's Trade Direction
+            let strokeColor = '#a855f7'; // Default purple
+            if (state.activeTrade) {
+                const isFavorable = state.activeTrade.direction === 'RISE' 
+                    ? (state.currentPrice >= state.activeTrade.entryPrice)
+                    : (state.currentPrice <= state.activeTrade.entryPrice);
+
+                strokeColor = isFavorable ? '#10b981' : '#ef4444';
+
+                // Synchronize circular progress ring color
+                const circleRing = document.getElementById('circleProgressRing');
+                if (circleRing) circleRing.style.stroke = strokeColor;
             }
 
+            // Draw Price Trendline
             ctx.beginPath();
-            ctx.strokeStyle = '#a855f7';
+            ctx.strokeStyle = strokeColor;
             ctx.lineWidth = 2.5;
 
-            const stepX = canvas.width / (state.priceHistory.length - 1);
+            const stepX = canvas.width / Math.max(state.priceHistory.length - 1, 1);
             state.priceHistory.forEach((val, index) => {
                 const x = index * stepX;
-                const y = canvas.height - ((val - min) / range * canvas.height * 0.75 + canvas.height * 0.12);
+                const y = canvas.height - ((val - plotMin) / range * canvas.height);
                 if (index === 0) ctx.moveTo(x, y);
                 else ctx.lineTo(x, y);
             });
             ctx.stroke();
 
+            // Draw Glowing Live Head Dot
             const lastX = canvas.width - 2;
-            const lastY = canvas.height - ((state.currentPrice - min) / range * canvas.height * 0.75 + canvas.height * 0.12);
+            const lastY = canvas.height - ((state.currentPrice - plotMin) / range * canvas.height);
 
             ctx.beginPath();
             ctx.arc(lastX, lastY, 5, 0, Math.PI * 2);
-            ctx.fillStyle = state.currentPrice >= baseline ? '#10b981' : '#ef4444';
-            ctx.shadowColor = ctx.fillStyle;
+            ctx.fillStyle = strokeColor;
+            ctx.shadowColor = strokeColor;
             ctx.shadowBlur = 10;
             ctx.fill();
             ctx.shadowBlur = 0;
         }
 
         // ==========================================
-        // DYNAMIC COUNTERS (Fluctuating every 1 minute)
+        // DYNAMIC COUNTERS
         // ==========================================
         function startStatsFluctuation() {
             let onlineBase = 1258;
@@ -2335,7 +2297,7 @@
             document.getElementById('pairBottomSheet').classList.add('show');
         }
 
-        function closePairSheet(e) {
+        function closePairSheet() {
             document.getElementById('pairBottomSheet').classList.remove('show');
         }
 
@@ -2355,7 +2317,7 @@
             
             state.priceHistory = [];
             for (let i = 0; i < 30; i++) {
-                state.priceHistory.push(state.currentPrice + (Math.random() - 0.49) * (state.currentPrice * 0.0005));
+                state.priceHistory.push(state.currentPrice + (Math.random() - 0.49) * (state.currentPrice * 0.0004));
             }
 
             closePairSheet();
@@ -2364,27 +2326,15 @@
         }
 
         // ==========================================
-        // STAKE & TRADING SYSTEM WITH LEFT-ALIGNED CIRCULAR TIMER
+        // STAKE & TRADING SYSTEM (Fixed Stakes, No Cancel)
         // ==========================================
         function setStake(amount) {
             state.stake = parseFloat(amount);
-            document.getElementById('stakeInput').value = state.stake.toFixed(3);
-            document.getElementById('potentialWin').innerText = `+${(state.stake * 1.8).toFixed(3)} USDT`;
+            document.getElementById('stakeDisplay').innerText = state.stake.toFixed(2);
 
             document.querySelectorAll('.preset-chips .chip').forEach(c => {
                 c.classList.toggle('active', parseFloat(c.innerText) === parseFloat(amount));
             });
-        }
-
-        function onManualStakeInput(val) {
-            const num = parseFloat(val);
-            if (!isNaN(num) && num > 0) {
-                state.stake = num;
-                document.getElementById('potentialWin').innerText = `+${(state.stake * 1.8).toFixed(3)} USDT`;
-                document.querySelectorAll('.preset-chips .chip').forEach(c => {
-                    c.classList.toggle('active', parseFloat(c.innerText) === num);
-                });
-            }
         }
 
         function updateBalanceUI() {
@@ -2403,6 +2353,7 @@
                 return;
             }
 
+            // Deduct stake
             state.balance -= state.stake;
             state.turnoverCompleted += state.stake;
             updateBalanceUI();
@@ -2418,19 +2369,14 @@
                 timer: duration
             };
 
-            // Setup Left-Aligned Circular Timer
+            // Show Compact Left Timer (No direction shown)
             const timerBox = document.getElementById('circularTimerBox');
             timerBox.style.display = 'flex';
-            const dirEl = document.getElementById('circularTimerDirection');
-            dirEl.innerText = `${direction} (x1.8)`;
-            dirEl.style.color = direction === 'RISE' ? '#10b981' : '#ef4444';
 
-            document.getElementById('cancelTradeBtn').style.display = 'flex';
-            showToast(`${direction} order placed · ${state.stake.toFixed(3)} USDT`);
+            showToast(`Order placed · ${state.stake.toFixed(2)} USDT`);
 
             const circleRing = document.getElementById('circleProgressRing');
-            const circumference = 2 * Math.PI * 17; // r=17
-            circleRing.style.stroke = direction === 'RISE' ? '#10b981' : '#ef4444';
+            const circumference = 2 * Math.PI * 16; // r=16
 
             tradeCountdown = setInterval(() => {
                 state.activeTrade.timer--;
@@ -2454,7 +2400,6 @@
             const isWin = trade.direction === 'RISE' ? (exitPrice >= trade.entryPrice) : (exitPrice <= trade.entryPrice);
 
             document.getElementById('circularTimerBox').style.display = 'none';
-            document.getElementById('cancelTradeBtn').style.display = 'none';
 
             let payout = 0;
             if (isWin) {
@@ -2476,27 +2421,10 @@
             renderInPageHistory();
             saveUserData();
 
-            showTradeResultModal({ won: isWin, amount: payout, stake: trade.stake, direction: trade.direction, entry: trade.entryPrice, exit: exitPrice });
+            showTradeResultModal({ won: isWin, amount: payout, stake: trade.stake, direction: trade.direction });
         }
 
-        function cancelTrade() {
-            if (!state.activeTrade) return;
-            clearInterval(tradeCountdown);
-            tradeCountdown = null;
-
-            const trade = { ...state.activeTrade };
-            state.balance += trade.stake;
-            state.activeTrade = null;
-
-            document.getElementById('circularTimerBox').style.display = 'none';
-            document.getElementById('cancelTradeBtn').style.display = 'none';
-
-            updateBalanceUI();
-            saveUserData();
-            showToast("Trade cancelled. Stake returned.");
-        }
-
-        function showTradeResultModal({ won, amount, stake, direction }) {
+        function showTradeResultModal({ won, amount, stake }) {
             const panel = document.getElementById('resultPanel');
             panel.classList.toggle('loss', !won);
 
@@ -2530,7 +2458,7 @@
         }
 
         // ==========================================
-        // IN-PAGE MY HISTORY RENDERING
+        // IN-PAGE MY HISTORY (Win = Green, Lose = Red)
         // ==========================================
         function renderInPageHistory() {
             const container = document.getElementById('inPageHistoryList');
@@ -2552,7 +2480,8 @@
                             <div style="font-size:0.62rem; color:var(--text-sub);">${item.date}</div>
                         </div>
                     </div>
-                    <div style="font-size:0.78rem; font-weight:800; color:${item.status === 'success' ? '#10b981' : '#ffffff'};">
+                    <!-- Win = Green (#10b981), Lose = Red (#ef4444) -->
+                    <div style="font-size:0.78rem; font-weight:800; color:${item.status === 'success' ? '#10b981' : '#ef4444'};">
                         ${item.amount}
                     </div>
                 </div>
@@ -2560,12 +2489,10 @@
         }
 
         // ==========================================
-        // RELIABLE CLIPBOARD COPY FUNCTION (100% FIXED)
+        // CLIPBOARD COPY
         // ==========================================
         function copyTextToClipboard(text, successMessage) {
             if (!text) return;
-            
-            // Modern Clipboard API
             if (navigator.clipboard && window.isSecureContext) {
                 navigator.clipboard.writeText(text).then(() => {
                     showToast(successMessage);
@@ -2585,21 +2512,15 @@
             tempInput.style.top = "0";
             tempInput.setAttribute('readonly', '');
             document.body.appendChild(tempInput);
-            
             tempInput.focus();
             tempInput.select();
-            
             try {
                 const successful = document.execCommand('copy');
-                if (successful) {
-                    showToast(successMessage);
-                } else {
-                    showToast("Copied: " + text.substring(0, 12) + "...");
-                }
+                if (successful) showToast(successMessage);
+                else showToast("Copied: " + text.substring(0, 12) + "...");
             } catch (err) {
-                showToast("Could not copy automatically. Please select & copy.");
+                showToast("Could not copy automatically.");
             }
-            
             document.body.removeChild(tempInput);
         }
 
@@ -2611,6 +2532,51 @@
         function copyRefLink() {
             const link = document.getElementById('refLinkDisplay').innerText.trim();
             copyTextToClipboard(link, "Referral link copied to clipboard!");
+        }
+
+        // ==========================================
+        // GIFT CODE REDEEM LOGIC (No Demo Codes)
+        // ==========================================
+        function redeemGiftCode() {
+            const code = document.getElementById('giftCodeInput').value.trim().toUpperCase();
+            if (!code) {
+                showToast("Please enter a valid Gift Code");
+                return;
+            }
+
+            if (!state.redeemedCodes) state.redeemedCodes = [];
+            if (state.redeemedCodes.includes(code)) {
+                showToast("This gift code has already been redeemed!");
+                return;
+            }
+
+            // Real promo codes configured for your users
+            const VALID_GIFT_CODES = {
+                "BOOOM10": 10.00,
+                "VIPUSDT": 5.00,
+                "LUCKY2026": 2.00,
+                "TBSTART": 1.00
+            };
+
+            if (VALID_GIFT_CODES[code]) {
+                const reward = VALID_GIFT_CODES[code];
+                state.balance += reward;
+                state.redeemedCodes.push(code);
+
+                state.history.deposits.unshift({
+                    title: `Gift Code (${code})`,
+                    date: new Date().toLocaleDateString(),
+                    amount: `+${reward.toFixed(2)} USDT`,
+                    status: "success"
+                });
+
+                saveUserData();
+                updateBalanceUI();
+                document.getElementById('giftCodeInput').value = "";
+                showToast(`Congratulations! +${reward.toFixed(2)} USDT added to your balance!`);
+            } else {
+                showToast("Invalid Gift Code. Please try again.");
+            }
         }
 
         function submitDepositTxId() {
@@ -2626,10 +2592,8 @@
                 return;
             }
 
-            // Activate Account Silently Upon First Deposit
             state.isAccountActive = true;
 
-            // Turnover Rule
             if (amount > 4.00) {
                 state.turnoverRequired = 7.00;
                 if (amount > state.highestDeposit) state.highestDeposit = amount;
@@ -2733,6 +2697,13 @@
                 if (navIndex >= 0) document.querySelectorAll('.nav-item')[navIndex].classList.add('active');
             }
 
+            if (tabId === 'predict') {
+                setTimeout(() => {
+                    resizeCanvas();
+                    drawChart();
+                }, 50);
+            }
+
             if (tabId === 'history') {
                 renderHistory('deposits');
             }
@@ -2777,7 +2748,7 @@
                                 <div class="history-date">${item.date}</div>
                             </div>
                         </div>
-                        <div class="history-amount" style="color: ${item.status === 'success' ? '#10b981' : '#ffffff'};">
+                        <div class="history-amount" style="color: ${item.status === 'success' ? '#10b981' : '#ef4444'};">
                             ${item.amount}
                         </div>
                     </div>
