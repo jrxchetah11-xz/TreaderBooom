@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>TreaderBooom</title>
+    <!-- Permanent App Favicon -->
+    <link rel="icon" type="image/png" href="logo.png">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- QRCode.js for generating QR code -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root {
             --bg-dark: #0a0612;
@@ -62,6 +62,176 @@
             overflow: hidden;
         }
 
+        /* SPLASH SCREEN */
+        .splash-screen {
+            position: fixed;
+            inset: 0;
+            background: #0a0612;
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .splash-screen.hide {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .splash-logo-wrapper {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .splash-logo-glow {
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(168,85,247,0.4) 0%, rgba(16,185,129,0.2) 60%, transparent 80%);
+            animation: pulse-glow 2s infinite alternate;
+        }
+
+        .splash-logo-img {
+            width: 115px;
+            height: 115px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(168,85,247,0.6);
+            box-shadow: 0 0 35px rgba(168,85,247,0.6);
+            z-index: 2;
+        }
+
+        .splash-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .splash-progress-bar {
+            width: 130px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .splash-progress-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 40%;
+            background: linear-gradient(90deg, #10b981, #06b6d4, #a855f7);
+            border-radius: 4px;
+            animation: progress-slide 1.8s infinite ease-in-out;
+        }
+
+        @keyframes progress-slide {
+            0% { left: -40%; width: 30%; }
+            50% { left: 40%; width: 50%; }
+            100% { left: 100%; width: 30%; }
+        }
+
+        @keyframes pulse-glow {
+            0% { transform: scale(0.95); opacity: 0.6; }
+            100% { transform: scale(1.1); opacity: 1; }
+        }
+
+        /* TELEGRAM AUTH MODAL */
+        .auth-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 6, 18, 0.96);
+            backdrop-filter: blur(14px);
+            z-index: 800;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .auth-overlay.show {
+            display: flex;
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 380px;
+            background: var(--bg-card);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 24px;
+            padding: 30px 24px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+        }
+
+        .auth-logo {
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            box-shadow: 0 0 25px rgba(168,85,247,0.5);
+            object-fit: cover;
+        }
+
+        .btn-tg-auth {
+            width: 100%;
+            background: linear-gradient(135deg, #229ed9, #0088cc);
+            border: none;
+            padding: 14px;
+            border-radius: 14px;
+            color: white;
+            font-size: 0.95rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 18px rgba(34, 158, 217, 0.4);
+            margin-top: 20px;
+        }
+
+        /* WELCOME BONUS POPUP */
+        .bonus-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(4, 3, 12, 0.88);
+            backdrop-filter: blur(12px);
+            z-index: 850;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .bonus-overlay.show {
+            display: flex;
+        }
+
+        .bonus-panel {
+            width: 100%;
+            max-width: 380px;
+            background: radial-gradient(circle at 50% 10%, rgba(16,185,129,0.25), transparent 50%), linear-gradient(160deg, #24183a, #100b1e);
+            border: 1px solid rgba(16,185,129,0.5);
+            border-radius: 28px;
+            padding: 26px 20px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+        }
+
         /* Header Bar */
         .app-header {
             padding: 12px 16px;
@@ -77,22 +247,28 @@
         .brand {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             font-weight: 800;
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             letter-spacing: -0.5px;
         }
 
-        .brand-icon {
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(135deg, #a855f7, #06b6d4);
+        .brand-icon-wrapper {
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
-            box-shadow: 0 0 12px rgba(168, 85, 247, 0.5);
+            box-shadow: 0 0 12px rgba(168, 85, 247, 0.6);
+            overflow: hidden;
+            border: 1px solid rgba(168, 85, 247, 0.5);
+        }
+
+        .brand-icon-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .brand span:nth-child(2) {
@@ -148,18 +324,30 @@
             border: none;
         }
 
-        .lang-btn {
+        .announcement-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 5px 10px;
-            font-size: 0.75rem;
-            color: var(--text-muted);
+            color: #f59e0b;
             display: flex;
             align-items: center;
-            gap: 4px;
-            font-weight: 600;
+            justify-content: center;
+            font-size: 14px;
             cursor: pointer;
+            position: relative;
+        }
+
+        .announcement-dot {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 7px;
+            height: 7px;
+            background: #ef4444;
+            border-radius: 50%;
+            box-shadow: 0 0 6px #ef4444;
         }
 
         /* Main Scrollable Content Area */
@@ -192,7 +380,14 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
+        }
+
+        .pair-selector-left {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 6px;
         }
 
         .pair-dropdown {
@@ -204,18 +399,22 @@
             align-items: center;
             gap: 8px;
             cursor: pointer;
+            transition: 0.2s;
         }
 
-        .btc-icon {
+        .pair-dropdown:active {
+            transform: scale(0.97);
+        }
+
+        .coin-icon {
             width: 24px;
             height: 24px;
-            background: #f7931a;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: bold;
         }
 
@@ -224,13 +423,13 @@
         }
 
         .current-price {
-            font-size: 1.5rem;
+            font-size: 1.45rem;
             font-weight: 800;
             letter-spacing: -0.5px;
         }
 
         .price-change {
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             color: var(--accent-red);
             font-weight: 600;
             display: flex;
@@ -239,12 +438,65 @@
             gap: 4px;
         }
 
-        /* Chart Area */
+        /* CIRCULAR TIMER (Positioned on the Left, right below Pair) */
+        .circular-timer-wrapper {
+            display: none;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 10px;
+            background: rgba(138, 92, 246, 0.12);
+            border: 1px solid rgba(138, 92, 246, 0.4);
+            border-radius: 14px;
+            padding: 6px 10px;
+            width: fit-content;
+            animation: pulse-border 1.5s infinite alternate;
+        }
+
+        .circle-svg-box {
+            position: relative;
+            width: 40px;
+            height: 40px;
+        }
+
+        .circle-svg-box svg {
+            transform: rotate(-90deg);
+            width: 40px;
+            height: 40px;
+        }
+
+        .circle-bg {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.1);
+            stroke-width: 3.5;
+        }
+
+        .circle-progress {
+            fill: none;
+            stroke: #a855f7;
+            stroke-width: 3.5;
+            stroke-linecap: round;
+            stroke-dasharray: 106.8; /* 2 * PI * 17 */
+            stroke-dashoffset: 0;
+            transition: stroke-dashoffset 1s linear, stroke 0.3s;
+        }
+
+        .timer-text-inside {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: white;
+        }
+
+        /* Chart Area with Reference Guideline */
         .chart-container {
             width: 100%;
-            height: 170px;
+            height: 175px;
             position: relative;
-            margin: 8px 0;
+            margin: 6px 0;
         }
 
         canvas#priceChart {
@@ -252,10 +504,25 @@
             height: 100%;
         }
 
+        .chart-guideline-badge {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(15, 10, 30, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 2px 7px;
+            border-radius: 6px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            pointer-events: none;
+            z-index: 5;
+        }
+
         .chart-footer {
             display: flex;
             align-items: center;
-            gap: 6px;
+            justify-content: space-between;
             font-size: 0.7rem;
             color: #10b981;
             margin-top: 4px;
@@ -269,12 +536,11 @@
             box-shadow: 0 0 8px #10b981;
         }
 
-        /* Live Activity Ticker */
         .live-ticker {
             display: flex;
             gap: 8px;
             align-items: center;
-            margin-top: 6px;
+            margin-top: 8px;
         }
 
         .live-badge {
@@ -335,48 +601,23 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            margin: 10px 0;
-        }
-
-        .stake-amount-display {
-            font-size: 2rem;
-            font-weight: 800;
-            display: flex;
-            align-items: center;
             gap: 8px;
-        }
-
-        .stake-amount-display span {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            font-weight: 600;
-        }
-
-        /* Slider */
-        .slider-container {
-            width: 100%;
             margin: 10px 0;
+            background: rgba(0,0,0,0.25);
+            border: 1px solid rgba(138, 92, 246, 0.3);
+            border-radius: 14px;
+            padding: 8px 14px;
         }
 
-        .range-slider {
-            -webkit-appearance: none;
-            width: 100%;
-            height: 4px;
-            border-radius: 2px;
-            background: linear-gradient(90deg, #8b5cf6 0%, #3b82f6 100%);
+        .stake-manual-input {
+            width: 140px;
+            background: transparent;
+            border: none;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+            text-align: center;
             outline: none;
-        }
-
-        .range-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background: #ffffff;
-            cursor: pointer;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
         }
 
         /* Preset Stake Chips */
@@ -391,16 +632,16 @@
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
-            padding: 6px 0;
+            padding: 8px 0;
             text-align: center;
-            font-size: 0.75rem;
+            font-size: 0.78rem;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.2s;
         }
 
         .chip.active {
-            background: rgba(138, 92, 246, 0.2);
+            background: rgba(138, 92, 246, 0.25);
             border-color: var(--accent-purple);
             color: #a855f7;
         }
@@ -433,8 +674,6 @@
             font-size: 1rem;
             color: white;
             transition: transform 0.1s, box-shadow 0.2s;
-            position: relative;
-            overflow: hidden;
         }
 
         .btn-predict:active {
@@ -458,21 +697,140 @@
             display: block;
         }
 
-        /* Active Trade Overlay Card */
-        .active-trade-card {
-            background: rgba(138, 92, 246, 0.15);
-            border: 1px solid var(--accent-purple);
+        .trade-cancel-btn {
+            margin-top: 10px;
+            width: 100%;
+            padding: 10px;
+            border: 1px solid rgba(248,113,113,.35);
+            background: rgba(239,68,68,.09);
+            color: #fca5a5;
+            border-radius: 11px;
+            font-weight: 700;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        /* IN-PAGE MY HISTORY (Below Rise/Fall) */
+        .my-history-section {
+            margin-top: 6px;
+        }
+
+        .my-history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .my-history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        /* CHANGE PAIR BOTTOM SHEET MODAL */
+        .bottom-sheet-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
+            z-index: 500;
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .bottom-sheet-overlay.show {
+            display: flex;
+        }
+
+        .bottom-sheet {
+            width: 100%;
+            max-width: 480px;
+            background: #140d28;
+            border-top: 1px solid rgba(138, 92, 246, 0.35);
+            border-radius: 26px 26px 0 0;
+            padding: 14px 18px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .sheet-handle {
+            width: 40px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            margin: 0 auto 6px;
+        }
+
+        .sheet-icon-top {
+            width: 46px;
+            height: 46px;
+            background: rgba(138, 92, 246, 0.2);
             border-radius: 14px;
-            padding: 12px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #a855f7;
+            font-size: 20px;
+        }
+
+        .sheet-title {
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 800;
+        }
+
+        .pair-list-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            animation: pulse-border 1.5s infinite alternate;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 14px;
+            padding: 10px 14px;
+            cursor: pointer;
+            transition: 0.2s;
         }
 
-        @keyframes pulse-border {
-            0% { border-color: rgba(138, 92, 246, 0.4); }
-            100% { border-color: rgba(168, 85, 247, 1); }
+        .pair-list-item:hover, .pair-list-item.selected {
+            background: rgba(138, 92, 246, 0.15);
+            border-color: rgba(168, 85, 247, 0.4);
+        }
+
+        .pair-item-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-sheet-close {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: white;
+            padding: 12px;
+            border-radius: 14px;
+            font-weight: 800;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-align: center;
+            margin-top: 6px;
         }
 
         /* TAB 2: DEPOSIT STYLING */
@@ -501,14 +859,26 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin: 16px 0;
+            margin: 14px 0;
         }
 
-        .qr-box {
+        .qr-img-box {
             background: white;
-            padding: 12px;
+            padding: 8px;
             border-radius: 16px;
-            box-shadow: 0 0 20px rgba(255,255,255,0.1);
+            box-shadow: 0 0 25px rgba(255,255,255,0.1);
+            width: 156px;
+            height: 156px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qr-img-box img {
+            width: 140px;
+            height: 140px;
+            object-fit: contain;
+            border-radius: 8px;
         }
 
         .address-box {
@@ -520,7 +890,7 @@
             align-items: center;
             justify-content: space-between;
             width: 100%;
-            margin-top: 14px;
+            margin-top: 10px;
         }
 
         .address-text {
@@ -562,8 +932,15 @@
             cursor: pointer;
         }
 
+        .txid-input-box {
+            margin-top: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
         .info-list {
-            margin-top: 10px;
+            margin-top: 8px;
             display: flex;
             flex-direction: column;
             gap: 8px;
@@ -861,21 +1238,21 @@
 
         /* Toast Notifications */
         .toast {
-            position: absolute;
-            top: 60px;
+            position: fixed;
+            top: 20px;
             left: 50%;
             transform: translateX(-50%) translateY(-20px);
-            background: rgba(16, 185, 129, 0.9);
+            background: rgba(16, 185, 129, 0.95);
             color: white;
-            padding: 8px 16px;
+            padding: 10px 20px;
             border-radius: 20px;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             font-weight: 700;
             opacity: 0;
             pointer-events: none;
             transition: all 0.3s ease;
-            z-index: 100;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 9999;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
 
         .toast.show {
@@ -883,28 +1260,202 @@
             transform: translateX(-50%) translateY(0);
         }
 
+        /* UPGRADED TRADE RESULT MODAL */
+        .result-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 600;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+            background: rgba(4,3,12,.88);
+            backdrop-filter: blur(12px);
+        }
 
-        /* TreaderBooom result modal */
-        .result-overlay { position:fixed; inset:0; z-index:200; display:none; align-items:center; justify-content:center; padding:22px; background:rgba(4,3,12,.82); backdrop-filter:blur(10px); }
-        .result-overlay.show { display:flex; }
-        .result-panel { width:100%; max-width:430px; border:1px solid rgba(168,85,247,.45); border-radius:28px; padding:24px 20px 18px; text-align:center; background:radial-gradient(circle at 50% 5%, rgba(16,185,129,.18), transparent 38%), linear-gradient(160deg,#24183a,#100b1e); box-shadow:0 20px 70px #000a; }
-        .result-panel.loss { background:radial-gradient(circle at 50% 5%,rgba(239,68,68,.20),transparent 38%),linear-gradient(160deg,#32182b,#100b1e); border-color:rgba(239,68,68,.5); }
-        .result-status { display:inline-flex; align-items:center; gap:8px; padding:7px 13px; border:1px solid rgba(16,185,129,.45); border-radius:30px; color:#6ee7b7; font-size:.72rem; font-weight:800; letter-spacing:1px; }
-        .result-panel.loss .result-status { border-color:rgba(248,113,113,.5); color:#fca5a5; }
-        .result-symbol { width:88px;height:88px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:20px auto 12px;font-size:38px;color:#6ee7b7;background:rgba(16,185,129,.13);border:1px solid rgba(16,185,129,.4);box-shadow:0 0 35px rgba(16,185,129,.15); }
-        .result-panel.loss .result-symbol { color:#fca5a5;background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.4);box-shadow:0 0 35px rgba(239,68,68,.12); }
-        .result-amount { font-size:clamp(2rem,8vw,2.8rem);font-weight:800;letter-spacing:-1px;color:#6ee7b7;overflow-wrap:anywhere; }
-        .result-panel.loss .result-amount { color:#fca5a5; }
-        .result-subtitle { font-size:1rem;font-weight:700;margin-top:9px; }
-        .result-detail { color:#b7b0ca;font-size:.82rem;line-height:1.6;margin:12px 0 18px; }
-        .result-actions { display:grid;grid-template-columns:1fr;gap:9px; }
-        .result-actions button { border:0;border-radius:13px;padding:13px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;color:white;background:linear-gradient(100deg,#7c3aed,#06b6d4); }
-        .result-actions button.secondary { background:transparent;border:1px solid rgba(255,255,255,.14);color:#d7d2e5; }
-        .trade-cancel-btn { margin-top:10px;width:100%;padding:10px;border:1px solid rgba(248,113,113,.35);background:rgba(239,68,68,.09);color:#fca5a5;border-radius:11px;font-weight:700;display:none;align-items:center;justify-content:center;gap:8px; }
-        .trade-cancel-btn:disabled { opacity:.5; }
-        .telegram-gate { display:none;position:fixed;inset:0;z-index:300;background:#0a0612;align-items:center;justify-content:center;padding:24px;text-align:center; }
-        .telegram-gate.show { display:flex; }
-        .telegram-gate .gate-card { max-width:380px;background:#15102a;border:1px solid rgba(138,92,246,.3);border-radius:22px;padding:28px; }
+        .result-overlay.show { display: flex; }
+
+        .result-panel {
+            width: 100%;
+            max-width: 420px;
+            border: 1px solid rgba(168,85,247,.45);
+            border-radius: 28px;
+            padding: 24px 20px 20px;
+            text-align: center;
+            background: radial-gradient(circle at 50% 15%, rgba(16,185,129,.22), transparent 45%), linear-gradient(160deg,#24183a,#100b1e);
+            box-shadow: 0 20px 70px rgba(0,0,0,0.85);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-panel.loss {
+            background: radial-gradient(circle at 50% 15%, rgba(239,68,68,.22), transparent 45%), linear-gradient(160deg,#32182b,#100b1e);
+            border-color: rgba(239,68,68,.5);
+        }
+
+        .result-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border: 1px solid rgba(16,185,129,.5);
+            border-radius: 30px;
+            color: #6ee7b7;
+            font-size: .72rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            background: rgba(16,185,129,0.1);
+        }
+
+        .result-panel.loss .result-status {
+            border-color: rgba(248,113,113,.5);
+            color: #fca5a5;
+            background: rgba(239,68,68,0.1);
+        }
+
+        .coins-graphic-wrapper {
+            position: relative;
+            width: 100px;
+            height: 80px;
+            margin: 16px auto 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sunburst-rays {
+            position: absolute;
+            inset: -20px;
+            background: radial-gradient(circle, rgba(16,185,129,0.3) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .usdt-stack-icon {
+            font-size: 52px;
+            color: #26a17b;
+            filter: drop-shadow(0 0 15px rgba(38, 161, 123, 0.7));
+            position: relative;
+            z-index: 2;
+        }
+
+        .result-panel.loss .usdt-stack-icon {
+            color: #ef4444;
+            filter: drop-shadow(0 0 15px rgba(239, 68, 68, 0.6));
+        }
+
+        .result-amount {
+            font-size: clamp(2rem, 8vw, 2.6rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: #6ee7b7;
+            margin: 4px 0 2px;
+        }
+
+        .result-panel.loss .result-amount {
+            color: #fca5a5;
+        }
+
+        .result-subtitle {
+            font-size: 1rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .result-hook-text {
+            color: #b7b0ca;
+            font-size: .76rem;
+            line-height: 1.4;
+            margin: 8px 0 14px;
+        }
+
+        .modal-comm-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .modal-comm-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 8px 4px;
+            text-align: center;
+        }
+
+        .modal-comm-level { font-size: 0.6rem; color: var(--text-sub); font-weight: 700; }
+        .modal-comm-rate { font-size: 1rem; font-weight: 800; margin-top: 2px; }
+
+        .modal-explainer-box {
+            background: rgba(138, 92, 246, 0.1);
+            border: 1px solid rgba(138, 92, 246, 0.25);
+            border-radius: 12px;
+            padding: 10px;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-align: left;
+            margin-bottom: 16px;
+        }
+
+        .btn-share-win {
+            width: 100%;
+            border: none;
+            border-radius: 14px;
+            padding: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: white;
+            background: linear-gradient(100deg, #7c3aed, #06b6d4);
+            box-shadow: 0 4px 18px rgba(124, 58, 237, 0.4);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+
+        .btn-modal-continue {
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            margin-top: 12px;
+            padding: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ANNOUNCEMENT MODAL */
+        .announce-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            z-index: 700;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .announce-overlay.show { display: flex; }
+
+        .announce-card {
+            width: 100%;
+            max-width: 380px;
+            background: var(--bg-card);
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            border-radius: 20px;
+            padding: 22px;
+            text-align: center;
+        }
 
         /* Hidden Sections */
         .tab-section {
@@ -920,45 +1471,238 @@
 </head>
 <body>
 
-
-    <div id="telegramGate" class="telegram-gate">
-      <div class="gate-card">
-        <div style="font-size:2rem;color:#a855f7;margin-bottom:14px"><i class="fa-brands fa-telegram"></i></div>
-        <h2 style="margin-bottom:10px">Open in Telegram</h2>
-        <p style="color:#94a3b8;font-size:.9rem;line-height:1.6">TreaderBooom requires a verified Telegram account. Open this Mini App from its official Telegram bot.</p>
-      </div>
-    </div>
-    <div id="resultOverlay" class="result-overlay" role="dialog" aria-modal="true" aria-labelledby="resultTitle">
-      <div id="resultPanel" class="result-panel">
-        <div class="result-status"><i class="fa-solid fa-circle-check"></i><span id="resultStatus">TRADE CONFIRMED</span></div>
-        <div class="result-symbol"><i id="resultIcon" class="fa-solid fa-trophy"></i></div>
-        <div id="resultAmount" class="result-amount">+0.000 USDT</div>
-        <div id="resultTitle" class="result-subtitle">You won this trade</div>
-        <p id="resultDetail" class="result-detail">Your trade has been settled.</p>
-        <div class="result-actions">
-          <button onclick="shareTradeResult()"><i class="fa-solid fa-share-nodes"></i> SHARE RESULT</button>
-          <button class="secondary" onclick="closeTradeResult()"><i class="fa-solid fa-arrow-right"></i> CONTINUE</button>
+    <!-- 1. SPLASH SCREEN -->
+    <div id="splashScreen" class="splash-screen">
+        <div class="splash-logo-wrapper">
+            <div class="splash-logo-glow"></div>
+            <img src="logo.png" alt="TreaderBooom" class="splash-logo-img">
         </div>
-      </div>
+        <div class="splash-title">
+            <span style="color:#fff;">Treader</span><span style="color:#10b981;">Booom</span>
+        </div>
+        <div class="splash-progress-bar">
+            <div class="splash-progress-fill"></div>
+        </div>
     </div>
 
+    <!-- 2. TELEGRAM AUTHENTICATION OVERLAY -->
+    <div id="authOverlay" class="auth-overlay">
+        <div class="auth-card">
+            <img src="logo.png" alt="Logo" class="auth-logo">
+            <h2 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 6px;">Welcome to TreaderBooom</h2>
+            <p style="color: var(--text-muted); font-size: 0.8rem; line-height: 1.5;">Connect with your Telegram account to start live crypto prediction and claim your welcome bonus.</p>
+            <button class="btn-tg-auth" onclick="completeTelegramAuth()">
+                <i class="fa-brands fa-telegram" style="font-size: 1.2rem;"></i>
+                Continue With Telegram
+            </button>
+        </div>
+    </div>
+
+    <!-- 3. WELCOME BONUS POPUP (1.00 USDT) -->
+    <div id="bonusOverlay" class="bonus-overlay">
+        <div class="bonus-panel">
+            <div style="font-size: 38px; color: #10b981; margin-bottom: 10px;">
+                <i class="fa-solid fa-gift"></i>
+            </div>
+            <span class="result-status"><i class="fa-solid fa-check-circle"></i> WELCOME GIFT</span>
+            <div class="result-amount" style="margin: 12px 0 6px;">+1.00 USDT</div>
+            <h3 style="font-size: 1rem; font-weight: 800;">Welcome Bonus Credited!</h3>
+            <p style="color: #b7b0ca; font-size: 0.78rem; margin: 10px 0 20px; line-height: 1.5;">
+                Congratulations! 1.00 USDT has been deposited to your balance. Start trading right now!
+            </p>
+            <button class="btn-cyan" style="width: 100%; padding: 14px; font-weight: 800;" onclick="closeBonusModal()">
+                START TRADING
+            </button>
+        </div>
+    </div>
+
+    <!-- 4. TRADE RESULT WIN/LOSS MODAL -->
+    <div id="resultOverlay" class="result-overlay">
+        <div id="resultPanel" class="result-panel">
+            <div class="result-status">
+                <i class="fa-solid fa-circle-check"></i>
+                <span id="resultStatus">WIN CONFIRMED</span>
+            </div>
+
+            <div class="coins-graphic-wrapper">
+                <div class="sunburst-rays"></div>
+                <div class="usdt-stack-icon"><i id="resultIcon" class="fa-solid fa-coins"></i></div>
+            </div>
+
+            <div id="resultAmount" class="result-amount">+0.000 USDT</div>
+            <div id="resultTitle" class="result-subtitle">You won 0.000 USDT</div>
+
+            <p id="resultHookText" class="result-hook-text">
+                Show your friends your win and receive USDT from every stake they make, on 3 levels.
+            </p>
+
+            <div id="winCommissionDetails">
+                <div class="modal-comm-grid">
+                    <div class="modal-comm-card" style="border-color: rgba(16,185,129,0.3);">
+                        <div class="modal-comm-level">LEVEL 1</div>
+                        <div class="modal-comm-rate" style="color: #10b981;">1%</div>
+                    </div>
+                    <div class="modal-comm-card" style="border-color: rgba(168,85,247,0.3);">
+                        <div class="modal-comm-level">LEVEL 2</div>
+                        <div class="modal-comm-rate" style="color: #a855f7;">0.5%</div>
+                    </div>
+                    <div class="modal-comm-card" style="border-color: rgba(245,158,11,0.3);">
+                        <div class="modal-comm-level">LEVEL 3</div>
+                        <div class="modal-comm-rate" style="color: #f59e0b;">0.25%</div>
+                    </div>
+                </div>
+
+                <div class="modal-explainer-box">
+                    <i class="fa-solid fa-users-rays" style="font-size: 24px; color: #a855f7;"></i>
+                    <div>
+                        Your friend stakes 10.00 USDT and you instantly receive <strong>0.10 USDT</strong> to your balance.<br>
+                        <span style="color: #fbbf24; font-size: 0.68rem;">Your friend receives a 1.00 USDT gift on their first visit.</span>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-share-win" onclick="shareTradeResult()">
+                <i class="fa-solid fa-paper-plane"></i> SEND YOUR WIN TO A FRIEND
+            </button>
+            <button class="btn-modal-continue" onclick="closeTradeResult()">CONTINUE</button>
+        </div>
+    </div>
+
+    <!-- 5. CHANGE PAIR BOTTOM SHEET -->
+    <div id="pairBottomSheet" class="bottom-sheet-overlay" onclick="closePairSheet(event)">
+        <div class="bottom-sheet" onclick="event.stopPropagation()">
+            <div class="sheet-handle"></div>
+            <div class="sheet-icon-top"><i class="fa-solid fa-arrow-trend-up"></i></div>
+            <div class="sheet-title">Change pair</div>
+
+            <div class="pair-list-item selected" onclick="selectCryptoPair('BTC/USDT')">
+                <div class="pair-item-left">
+                    <div class="coin-icon" style="background: #f7931a;"><i class="fa-brands fa-bitcoin"></i></div>
+                    <div>
+                        <strong style="font-size: 0.85rem; display: block;">BTC/USDT</strong>
+                        <span style="font-size: 0.65rem; color: var(--text-sub);">Bitcoin</span>
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <strong style="font-size: 0.85rem; display: block;" id="sheetPrice-BTC">80,032.01</strong>
+                    <span style="font-size: 0.65rem; color: var(--accent-red);">-0.05%</span>
+                </div>
+            </div>
+
+            <div class="pair-list-item" onclick="selectCryptoPair('ETH/USDT')">
+                <div class="pair-item-left">
+                    <div class="coin-icon" style="background: #627eea;"><i class="fa-brands fa-ethereum"></i></div>
+                    <div>
+                        <strong style="font-size: 0.85rem; display: block;">ETH/USDT</strong>
+                        <span style="font-size: 0.65rem; color: var(--text-sub);">Ethereum</span>
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <strong style="font-size: 0.85rem; display: block;" id="sheetPrice-ETH">2,320.79</strong>
+                    <span style="font-size: 0.65rem; color: var(--accent-red);">-0.09%</span>
+                </div>
+            </div>
+
+            <div class="pair-list-item" onclick="selectCryptoPair('BNB/USDT')">
+                <div class="pair-item-left">
+                    <div class="coin-icon" style="background: #f3ba2f; color: #000;"><i class="fa-solid fa-coins"></i></div>
+                    <div>
+                        <strong style="font-size: 0.85rem; display: block;">BNB/USDT</strong>
+                        <span style="font-size: 0.65rem; color: var(--text-sub);">BNB</span>
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <strong style="font-size: 0.85rem; display: block;" id="sheetPrice-BNB">742.360</strong>
+                    <span style="font-size: 0.65rem; color: var(--accent-red);">-0.09%</span>
+                </div>
+            </div>
+
+            <div class="pair-list-item" onclick="selectCryptoPair('SOL/USDT')">
+                <div class="pair-item-left">
+                    <div class="coin-icon" style="background: #14f195; color: #000;"><i class="fa-solid fa-bolt"></i></div>
+                    <div>
+                        <strong style="font-size: 0.85rem; display: block;">SOL/USDT</strong>
+                        <span style="font-size: 0.65rem; color: var(--text-sub);">Solana</span>
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <strong style="font-size: 0.85rem; display: block;" id="sheetPrice-SOL">100.140</strong>
+                    <span style="font-size: 0.65rem; color: var(--accent-red);">-0.09%</span>
+                </div>
+            </div>
+
+            <div class="pair-list-item" onclick="selectCryptoPair('XRP/USDT')">
+                <div class="pair-item-left">
+                    <div class="coin-icon" style="background: #23292f;"><i class="fa-solid fa-x"></i></div>
+                    <div>
+                        <strong style="font-size: 0.85rem; display: block;">XRP/USDT</strong>
+                        <span style="font-size: 0.65rem; color: var(--text-sub);">XRP</span>
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <strong style="font-size: 0.85rem; display: block;" id="sheetPrice-XRP">1.312</strong>
+                    <span style="font-size: 0.65rem; color: var(--accent-red);">-0.10%</span>
+                </div>
+            </div>
+
+            <div class="pair-list-item" onclick="selectCryptoPair('DOGE/USDT')">
+                <div class="pair-item-left">
+                    <div class="coin-icon" style="background: #c2a633;"><i class="fa-solid fa-paw"></i></div>
+                    <div>
+                        <strong style="font-size: 0.85rem; display: block;">DOGE/USDT</strong>
+                        <span style="font-size: 0.65rem; color: var(--text-sub);">Dogecoin</span>
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <strong style="font-size: 0.85rem; display: block;" id="sheetPrice-DOGE">0.07761</strong>
+                    <span style="font-size: 0.65rem; color: var(--accent-red);">-0.06%</span>
+                </div>
+            </div>
+
+            <button class="btn-sheet-close" onclick="closePairSheet()">CLOSE</button>
+        </div>
+    </div>
+
+    <!-- 6. ANNOUNCEMENT MODAL -->
+    <div id="announceOverlay" class="announce-overlay">
+        <div class="announce-card">
+            <div style="font-size: 36px; color: #f59e0b; margin-bottom: 12px;"><i class="fa-solid fa-bullhorn"></i></div>
+            <h3 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 6px;">Official Announcement</h3>
+            <p style="color: var(--text-muted); font-size: 0.8rem; line-height: 1.5; margin-bottom: 16px;">
+                Welcome to TreaderBooom! Make sure to join our official Telegram channel for live trade signals, promotions, and platform updates.
+            </p>
+            <button class="btn-cyan" style="width: 100%; margin-bottom: 8px;" onclick="window.open('https://t.me/TreaderBoomAnnouncment', '_blank')">
+                JOIN TELEGRAM CHANNEL
+            </button>
+            <button class="btn-modal-continue" style="margin-top: 4px;" onclick="document.getElementById('announceOverlay').classList.remove('show')">
+                DISMISS
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN APPLICATION CONTAINER -->
     <div class="app-container">
         <!-- Toast Feedback -->
-        <div id="toast" class="toast">Address copied to clipboard!</div>
+        <div id="toast" class="toast">Action completed successfully</div>
 
-        <!-- App Header -->
+        <!-- App Header Bar -->
         <header class="app-header">
             <div class="brand">
-                <div class="brand-icon"><i class="fa-solid fa-chart-line"></i></div>
+                <div class="brand-icon-wrapper">
+                    <img src="logo.png" alt="TB">
+                </div>
                 <div><span>Treader</span><span class="highlight">Booom</span></div>
             </div>
             <div class="header-actions">
                 <div class="balance-badge">
                     <div class="usdt-icon"><i class="fa-solid fa-t"></i></div>
-                    <span id="userBalance">0.40</span> USDT
+                    <span id="userBalance">0.00</span> USDT
                     <button class="add-balance-btn" onclick="switchTab('deposit')">+</button>
                 </div>
-                <button class="lang-btn"><i class="fa-solid fa-globe"></i> EN</button>
+                <button class="announcement-btn" onclick="openAnnouncement()">
+                    <i class="fa-solid fa-bullhorn"></i>
+                    <div class="announcement-dot"></div>
+                </button>
             </div>
         </header>
 
@@ -969,28 +1713,51 @@
             <section id="tab-predict" class="tab-section active">
                 <div class="card">
                     <div class="pair-selector">
-                        <div class="pair-dropdown">
-                            <div class="btc-icon"><i class="fa-bold fa-bitcoin"></i></div>
-                            <div>
-                                <strong style="font-size: 0.85rem; display: block;">BTC/USDT</strong>
-                                <span style="font-size: 0.65rem; color: var(--text-sub);">Change pair &#9660;</span>
+                        <!-- Left side: Pair Dropdown + Circular Countdown Timer right below it -->
+                        <div class="pair-selector-left">
+                            <div class="pair-dropdown" onclick="openPairSheet()">
+                                <div class="coin-icon" id="activePairIcon" style="background: #f7931a;"><i class="fa-brands fa-bitcoin"></i></div>
+                                <div>
+                                    <strong style="font-size: 0.85rem; display: block;" id="activePairTitle">BTC/USDT</strong>
+                                    <span style="font-size: 0.65rem; color: var(--text-sub);">Change pair &#9660;</span>
+                                </div>
+                            </div>
+
+                            <!-- Circular Countdown Timer (Positioned on the Left, right below Pair) -->
+                            <div id="circularTimerBox" class="circular-timer-wrapper">
+                                <div class="circle-svg-box">
+                                    <svg>
+                                        <circle class="circle-bg" cx="20" cy="20" r="17"></circle>
+                                        <circle id="circleProgressRing" class="circle-progress" cx="20" cy="20" r="17"></circle>
+                                    </svg>
+                                    <div id="circularTimerSeconds" class="timer-text-inside">60s</div>
+                                </div>
+                                <div>
+                                    <div style="font-size: 0.68rem; color: var(--text-muted); line-height: 1.1;">In progress</div>
+                                    <div id="circularTimerDirection" style="font-weight: 800; font-size: 0.8rem; color: #10b981;">RISE (x1.8)</div>
+                                </div>
                             </div>
                         </div>
+
+                        <!-- Right side: Current Price -->
                         <div class="price-display">
-                            <div id="btcPrice" class="current-price">79,830.01</div>
-                            <div id="priceChange" class="price-change">-0.003% &bull; 60s</div>
+                            <div id="currentPriceDisplay" class="current-price">80,032.01</div>
+                            <div id="priceChange" class="price-change">-0.05% &bull; 60s</div>
                         </div>
                     </div>
 
-                    <!-- Chart Container -->
+                    <!-- Chart Container with Guideline Reference -->
                     <div class="chart-container">
                         <canvas id="priceChart"></canvas>
+                        <div id="chartGuidelineBadge" class="chart-guideline-badge">BASELINE: <span id="baselinePriceText">--</span></div>
                     </div>
 
-                    <div style="font-size:.66rem;color:#fbbf24;margin-top:5px"><i class="fa-solid fa-triangle-exclamation"></i> Demo interface only — prices and balances are simulated.</div>
                     <div class="chart-footer">
-                        <div class="dot-live"></div>
-                        Demo price feed
+                        <div style="display:flex;align-items:center;gap:6px;">
+                            <div class="dot-live"></div>
+                            Real-time market feed
+                        </div>
+                        <div id="chartIndicatorText" style="font-weight: 700; color: #10b981;">AT BASELINE</div>
                     </div>
 
                     <div class="live-ticker">
@@ -1001,44 +1768,29 @@
                     </div>
 
                     <div class="online-stats">
-                        <div class="stat-pill"><div class="dot-live"></div> <strong>1,258</strong> online now</div>
-                        <div class="stat-pill"><strong>564</strong> live predictions <i class="fa-regular fa-circle-question" style="margin-left: 2px;"></i></div>
+                        <div class="stat-pill"><div class="dot-live"></div> <strong id="statOnlineNow">1,258</strong> online now</div>
+                        <div class="stat-pill"><strong id="statLivePredictions">564</strong> live predictions</div>
                     </div>
                 </div>
 
                 <!-- Stake Controls Card -->
                 <div class="card">
                     <div class="stake-header">
-                        <span>STAKE</span>
-                        <span>Maximum <span id="maxStakeDisplay">0.04</span> USDT &bull; 10% of balance</span>
+                        <span>STAKE AMOUNT</span>
+                        <span>Balance: <span id="quickBalanceDisplay">0.00</span> USDT</span>
                     </div>
 
                     <div class="stake-input-container">
-                        <div class="usdt-icon" style="width: 24px; height: 24px;"><i class="fa-solid fa-t"></i></div>
-                        <div class="stake-amount-display"><span id="stakeValue">0.04</span> <span>USDT</span></div>
-                    </div>
-
-                    <div class="slider-container">
-                        <input type="range" min="0.001" max="0.04" step="0.001" value="0.04" class="range-slider" id="stakeSlider" oninput="updateStakeFromSlider(this.value)">
+                        <div class="usdt-icon" style="width: 22px; height: 22px;"><i class="fa-solid fa-t"></i></div>
+                        <input type="number" step="0.001" id="stakeInput" class="stake-manual-input" value="0.03" oninput="onManualStakeInput(this.value)">
+                        <span style="font-weight: 700; font-size: 0.85rem; color: var(--text-muted);">USDT</span>
                     </div>
 
                     <div class="preset-chips">
-                        <div class="chip" onclick="setStake(0.001)">0.001</div>
-                        <div class="chip" onclick="setStake(0.005)">0.005</div>
-                        <div class="chip" onclick="setStake(0.01)">0.01</div>
-                        <div class="chip active" id="chipMax" onclick="setStake('MAX')">MAX<br><span style="font-size:0.6rem;">0.04</span></div>
-                    </div>
-                </div>
-
-                <!-- Active Trade Status Card (Hidden by default) -->
-                <div id="activeTradeCard" class="active-trade-card" style="display: none;">
-                    <div>
-                        <div style="font-size: 0.75rem; color: var(--text-muted);">Active Prediction</div>
-                        <div id="tradeDirection" style="font-weight: 800; font-size: 0.9rem;">RISE (x1.8)</div>
-                    </div>
-                    <div style="text-align: right;">
-                        <div id="tradeTimer" style="font-size: 1.2rem; font-weight: 800; color: #a855f7;">60s</div>
-                        <div id="entryPriceDisplay" style="font-size: 0.65rem; color: var(--text-sub);">Entry: 79,830.01</div>
+                        <div class="chip" onclick="setStake(0.010)">0.010</div>
+                        <div class="chip" onclick="setStake(0.020)">0.020</div>
+                        <div class="chip active" onclick="setStake(0.03)">0.03</div>
+                        <div class="chip" onclick="setStake(0.05)">0.05</div>
                     </div>
                 </div>
 
@@ -1046,22 +1798,36 @@
 
                 <!-- Action Controls -->
                 <div>
-                    <div class="win-payout-info">Win if you are right: <strong id="potentialWin">+0.072 USDT</strong></div>
+                    <div class="win-payout-info">Estimated payout: <strong id="potentialWin">+0.054 USDT</strong></div>
                     <div class="action-buttons">
                         <button class="btn-predict btn-rise" onclick="startTrade('RISE')">
-                            <i class="fa-solid fa-arrow-trend-up" font-size: 20px;></i>
+                            <i class="fa-solid fa-arrow-trend-up" style="font-size: 20px;"></i>
                             <div>
                                 RISE
                                 <span class="multiplier-badge">&times;1.8</span>
                             </div>
                         </button>
                         <button class="btn-predict btn-fall" onclick="startTrade('FALL')">
-                            <i class="fa-solid fa-arrow-trend-down" font-size: 20px;></i>
+                            <i class="fa-solid fa-arrow-trend-down" style="font-size: 20px;"></i>
                             <div>
                                 FALL
                                 <span class="multiplier-badge">&times;1.8</span>
                             </div>
                         </button>
+                    </div>
+                </div>
+
+                <!-- IN-PAGE MY HISTORY SECTION -->
+                <div class="card my-history-section">
+                    <div class="my-history-header">
+                        <div style="display:flex;align-items:center;gap:6px;">
+                            <i class="fa-solid fa-clock-rotate-left" style="color: #a855f7;"></i>
+                            <span>My History</span>
+                        </div>
+                        <span style="font-size: 0.65rem; color: var(--text-sub);">Recent Predictions</span>
+                    </div>
+                    <div id="inPageHistoryList" class="my-history-list">
+                        <!-- Dynamically filled with predictions -->
                     </div>
                 </div>
             </section>
@@ -1074,7 +1840,7 @@
                     </div>
                     <div>
                         <h3 style="font-size: 0.95rem; font-weight: 800;">Deposit USDT</h3>
-                        <p style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">Your personal address on BNB Smart Chain (BEP20). Minimum 1.00 USDT, credited automatically.</p>
+                        <p style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">Your personal BEP20 address on BNB Smart Chain. Credited automatically.</p>
                     </div>
                 </div>
 
@@ -1090,36 +1856,49 @@
                         <span style="background: #f59e0b; color: #000; font-size: 0.65rem; font-weight: 800; padding: 2px 6px; border-radius: 6px;">BEP20</span>
                     </div>
 
+                    <!-- Deposit QR Code (Updated to your QR) -->
                     <div class="qr-container">
-                        <div class="qr-box" id="qrcode"></div>
+                        <div class="qr-img-box">
+                            <img src="qr.png" alt="Deposit QR Code" id="depositQrCodeImg" onerror="this.onerror=null; this.src='qr.png'">
+                        </div>
                     </div>
 
                     <div class="address-box">
-                        <span class="address-text" id="walletAddress">0x5643C21852b73aE93F57E1F7a8b74b47Fe253e0d</span>
-                        <i class="fa-regular fa-copy" style="cursor: pointer; color: var(--text-muted);" onclick="copyAddress()"></i>
+                        <span class="address-text" id="walletAddress">0x9e04F712817168066Efc0F5F53488F78Fa206B18</span>
+                        <i class="fa-regular fa-copy" style="cursor: pointer; color: var(--text-muted); font-size: 1rem; padding: 4px;" onclick="copyAddress()"></i>
                     </div>
 
+                    <!-- Action Buttons: COPY ADDRESS (Fixed & Working 100%) -->
                     <div class="btn-action-row">
-                        <button class="btn-cyan" onclick="copyAddress()">COPY ADDRESS</button>
-                        <button class="btn-outline" onclick="window.open('https://bscscan.com', '_blank')">VIEW ON BSCSCAN</button>
+                        <button class="btn-cyan" onclick="copyAddress()"><i class="fa-regular fa-copy"></i> COPY ADDRESS</button>
+                        <button class="btn-outline" onclick="window.open('https://bscscan.com/address/0x9e04F712817168066Efc0F5F53488F78Fa206B18', '_blank')">VIEW ON BSCSCAN</button>
+                    </div>
+
+                    <!-- Transaction Hash (TxID) Submit Box -->
+                    <div class="txid-input-box">
+                        <label class="form-label">SUBMIT TRANSACTION HASH (TXID)</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="txIdInput" class="form-input" placeholder="Paste 0x... transaction hash here">
+                        </div>
+                        <div class="input-wrapper" style="margin-top: 6px;">
+                            <input type="number" step="0.1" id="txAmountInput" class="form-input" placeholder="Amount transferred in USDT (e.g. 5.00)">
+                        </div>
+                        <button class="btn-cyan" style="width: 100%; margin-top: 8px; background: linear-gradient(135deg, #10b981, #059669);" onclick="submitDepositTxId()">
+                            <i class="fa-solid fa-check"></i> CONFIRM DEPOSIT
+                        </button>
                     </div>
                 </div>
-
-                <!-- Simulation Quick Deposit Button for Demo -->
-                <button class="btn-cyan" style="background: linear-gradient(135deg, #10b981, #059669);" onclick="simulateDeposit()">
-                    <i class="fa-solid fa-plus-circle"></i> SIMULATE DEMO DEPOSIT (+1.00 USDT)
-                </button>
 
                 <div class="card">
                     <h4 style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-sub); margin-bottom: 8px;">BEFORE YOU SEND</h4>
                     <div class="info-list">
                         <div class="info-item">
                             <i class="fa-solid fa-circle-info"></i>
-                            <div>Send only <strong>USDT</strong> on the <strong>BNB Smart Chain (BEP20)</strong> network. Other coins or networks are lost and cannot be recovered.</div>
+                            <div>Send only <strong>USDT</strong> on the <strong>BNB Smart Chain (BEP20)</strong> network. Other assets will be permanently lost.</div>
                         </div>
                         <div class="info-item">
                             <i class="fa-solid fa-circle-info"></i>
-                            <div>The minimum deposit is <strong>1.00 USDT</strong>. Smaller transfers are added up and credited once the total reaches the minimum.</div>
+                            <div>The minimum deposit is <strong>1.00 USDT</strong>. Paste your TxID above after the transfer to verify instantly.</div>
                         </div>
                     </div>
                 </div>
@@ -1139,10 +1918,10 @@
 
                 <div class="card">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span class="form-label">AVAILABLE</span>
+                        <span class="form-label">AVAILABLE BALANCE</span>
                         <div style="display: flex; align-items: center; gap: 6px; font-weight: 800;">
                             <div class="usdt-icon"><i class="fa-solid fa-t"></i></div>
-                            <span id="withdrawAvailable">0.40</span> USDT
+                            <span id="withdrawAvailable">0.00</span> USDT
                         </div>
                     </div>
 
@@ -1181,7 +1960,7 @@
                 </div>
 
                 <div style="font-size: 0.7rem; color: var(--text-sub); text-align: center; line-height: 1.4;">
-                    Withdrawals are sent automatically, usually within 1-5 minutes. You get a bot message with the transaction link.
+                    Withdrawals are processed automatically on BNB Smart Chain within 1-5 minutes.
                 </div>
             </section>
 
@@ -1193,11 +1972,11 @@
                     </div>
                     <h2 style="font-size: 1.2rem; font-weight: 800;">Invite friends, earn together</h2>
                     <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 6px; line-height: 1.4;">
-                        Receive 1% of every stake of the friends you invite, 0.5% from their friends and 0.25% from the third level. Paid instantly to your balance.
+                        Receive 1% of every stake from direct friends, 0.5% from their friends, and 0.25% from the third level. Paid instantly.
                     </p>
 
                     <div class="address-box" style="margin-top: 14px;">
-                        <span class="address-text" id="refLink">https://t.me/YOUR_BOT_USERNAME?start=r_ZTQAQYUD</span>
+                        <span class="address-text" id="refLinkDisplay">https://t.me/TreaderBoomBot?start=--</span>
                         <i class="fa-regular fa-copy" style="cursor: pointer; color: var(--text-muted);" onclick="copyRefLink()"></i>
                     </div>
 
@@ -1213,29 +1992,29 @@
                         </div>
                         <div>
                             <strong style="font-size: 0.8rem; display: block;">TreaderBooom Community</strong>
-                            <span style="font-size: 0.65rem; color: var(--text-muted);">News, chat with other players and answers</span>
+                            <span style="font-size: 0.65rem; color: var(--text-muted);">News, chat with traders & signals</span>
                         </div>
                     </div>
-                    <button class="btn-cyan" style="padding: 6px 12px; font-size: 0.7rem;" onclick="window.open('https://t.me', '_blank')">Join group</button>
+                    <button class="btn-cyan" style="padding: 6px 12px; font-size: 0.7rem;" onclick="window.open('https://t.me/TreaderBoom', '_blank')">Join group</button>
                 </div>
 
                 <div class="commission-grid">
                     <div class="comm-card">
                         <div class="comm-level">LEVEL 1</div>
                         <div class="comm-rate l1">1%</div>
-                        <div class="comm-meta">0 friends</div>
+                        <div class="comm-meta">Direct Friends</div>
                         <div class="comm-meta" style="color: white; font-weight: 700; margin-top: 2px;">+0.00 USDT</div>
                     </div>
                     <div class="comm-card">
                         <div class="comm-level">LEVEL 2</div>
                         <div class="comm-rate l2">0.5%</div>
-                        <div class="comm-meta">0 friends</div>
+                        <div class="comm-meta">Level 2</div>
                         <div class="comm-meta" style="color: white; font-weight: 700; margin-top: 2px;">+0.00 USDT</div>
                     </div>
                     <div class="comm-card">
                         <div class="comm-level">LEVEL 3</div>
                         <div class="comm-rate l3">0.25%</div>
-                        <div class="comm-meta">0 friends</div>
+                        <div class="comm-meta">Level 3</div>
                         <div class="comm-meta" style="color: white; font-weight: 700; margin-top: 2px;">+0.00 USDT</div>
                     </div>
                 </div>
@@ -1243,7 +2022,7 @@
                 <div class="card">
                     <h4 style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-sub); margin-bottom: 6px;">HOW MUCH YOU CAN EARN</h4>
                     <p style="font-size: 0.72rem; color: var(--text-muted); line-height: 1.4;">
-                        Example: your friend stakes <strong>10.00 USDT</strong> on Up or Down and you instantly receive <strong>0.10 USDT</strong>, whether they win or lose.
+                        Example: your friend stakes <strong>10.00 USDT</strong> on Rise or Fall and you instantly receive <strong>0.10 USDT</strong>, whether they win or lose.
                     </p>
                 </div>
             </section>
@@ -1290,232 +2069,379 @@
 
     <!-- Application Logic Script -->
     <script>
-        // State Management
+        // ==========================================
+        // CONFIGURATION: Set your Telegram Bot Username here
+        // ==========================================
+        const BOT_USERNAME = "TreaderBooom_bot";
+
+        // Multi-Pair Definitions
+        const CRYPTO_PAIRS = {
+            'BTC/USDT': { name: 'Bitcoin', symbol: 'BTC', price: 80032.01, change: -0.05, icon: 'fa-bitcoin', bg: '#f7931a', isBrand: true },
+            'ETH/USDT': { name: 'Ethereum', symbol: 'ETH', price: 2320.79, change: -0.09, icon: 'fa-ethereum', bg: '#627eea', isBrand: true },
+            'BNB/USDT': { name: 'BNB', symbol: 'BNB', price: 742.360, change: -0.09, icon: 'fa-coins', bg: '#f3ba2f', isBrand: false },
+            'SOL/USDT': { name: 'Solana', symbol: 'SOL', price: 100.140, change: -0.09, icon: 'fa-bolt', bg: '#14f195', isBrand: false },
+            'XRP/USDT': { name: 'XRP', symbol: 'XRP', price: 1.312, change: -0.10, icon: 'fa-x', bg: '#23292f', isBrand: false },
+            'DOGE/USDT': { name: 'Dogecoin', symbol: 'DOGE', price: 0.07761, change: -0.06, icon: 'fa-paw', bg: '#c2a633', isBrand: false }
+        };
+
+        let currentPairKey = 'BTC/USDT';
         let tradeCountdown = null;
-        let telegramUser = null;
-        let appConfig = { tradeDuration: 60, multiplier: 1.8, tradingEnabled: true, cancelEnabled: true, minStake: 0.001, maxStakePercent: 10 };
+        let onlineStatsInterval = null;
+
+        // Application State
         let state = {
-            balance: 0.40,
-            stake: 0.04,
-            currentPrice: 79830.01,
+            balance: 0.00,
+            stake: 0.03,
+            currentPrice: CRYPTO_PAIRS['BTC/USDT'].price,
+            baselinePrice: CRYPTO_PAIRS['BTC/USDT'].price,
             priceHistory: [],
             activeTrade: null,
+            // Silent Account Gates
+            isAccountActive: false, // Activated automatically upon first deposit
+            turnoverCompleted: 0.00,
+            turnoverRequired: 0.00,
+            highestDeposit: 0.00,
+            isBonusClaimed: false,
+            userId: '10984218',
             history: {
-                deposits: [
-                    { title: "Welcome gift", date: "Oct 27, 2026, 1:46 AM", amount: "+1.00 USDT", status: "success" }
-                ],
+                deposits: [],
                 predictions: [],
                 invitations: []
             }
         };
 
-
-        // Telegram Mini App identity: backend must validate initData; never trust client-only user fields.
-        (async function bootTelegramMiniApp() {
-            const tg = window.Telegram && window.Telegram.WebApp;
-            if (!tg || !tg.initData) {
-                document.getElementById('telegramGate').classList.add('show');
-                document.querySelector('.app-container').style.display = 'none';
-                return;
-            }
-            tg.ready(); tg.expand();
+        // Load Persisted User Profile from Local Storage
+        function loadStoredUserData() {
             try {
-                const res = await fetch('/api/session', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ initData: tg.initData }) });
-                if (!res.ok) throw new Error('Telegram verification failed');
-                const data = await res.json();
-                telegramUser = data.user;
-                const cfg = await fetch('/api/config').then(r=>r.json());
-                appConfig = {...appConfig, ...cfg};
-                if (!appConfig.tradingEnabled) showToast('Trading is temporarily paused by admin.');
+                const saved = localStorage.getItem('treaderbooom_user_profile');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    state.balance = data.balance ?? 0.00;
+                    state.isAccountActive = !!data.isAccountActive;
+                    state.turnoverCompleted = data.turnoverCompleted ?? 0.00;
+                    state.turnoverRequired = data.turnoverRequired ?? 0.00;
+                    state.highestDeposit = data.highestDeposit ?? 0.00;
+                    state.isBonusClaimed = !!data.isBonusClaimed;
+                    state.userId = data.userId || state.userId;
+                    if (data.history) state.history = data.history;
+                }
             } catch (e) {
-                document.getElementById('telegramGate').classList.add('show');
-                document.querySelector('.app-container').style.display = 'none';
+                console.error("Storage loading error:", e);
             }
-        })();
-
-        function showTradeResult({won, amount, stake, direction, entry, exit, reason='settled'}) {
-            const panel = document.getElementById('resultPanel');
-            panel.classList.toggle('loss', !won);
-            document.getElementById('resultStatus').textContent = won ? 'WIN CONFIRMED' : (reason === 'cancelled' ? 'TRADE CANCELLED' : 'TRADE LOST');
-            document.getElementById('resultIcon').className = won ? 'fa-solid fa-trophy' : (reason === 'cancelled' ? 'fa-solid fa-ban' : 'fa-solid fa-heart-crack');
-            document.getElementById('resultAmount').textContent = won ? `+${amount.toFixed(4)} USDT` : (reason === 'cancelled' ? `${stake.toFixed(4)} USDT returned` : `-${stake.toFixed(4)} USDT`);
-            document.getElementById('resultTitle').textContent = won ? 'You won this trade' : (reason === 'cancelled' ? 'Your trade was cancelled' : 'This trade did not go your way');
-            document.getElementById('resultDetail').textContent = reason === 'cancelled'
-              ? `Your ${direction} trade was cancelled. This demo has returned the stake to your displayed balance.`
-              : `Direction: ${direction}. Entry: ${Number(entry).toFixed(2)} · Exit: ${Number(exit).toFixed(2)}. ${won ? 'The demo payout has been added to your displayed balance.' : 'The demo stake was not returned.'}`;
-            document.getElementById('resultOverlay').classList.add('show');
-            if (window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.notificationOccurred(won ? 'success' : 'error');
-        }
-        function closeTradeResult(){ document.getElementById('resultOverlay').classList.remove('show'); }
-        function shareTradeResult(){
-            const text = document.getElementById('resultTitle').textContent + ' — ' + document.getElementById('resultAmount').textContent + ' (TreaderBooom demo)';
-            if (window.Telegram?.WebApp?.switchInlineQuery) window.Telegram.WebApp.switchInlineQuery(text, []);
-            else if (navigator.share) navigator.share({title:'TreaderBooom', text}).catch(()=>{});
-            else showToast('Sharing is not supported here.');
-        }
-        async function reportEvent(type, details={}) {
-            try { if (telegramUser && window.Telegram?.WebApp?.initData) await fetch('/api/events', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initData:window.Telegram.WebApp.initData,type,details})}); } catch (_) {}
         }
 
-        // Canvas Setup for Real-time Chart Animation
+        function saveUserData() {
+            try {
+                const dataToSave = {
+                    balance: state.balance,
+                    isAccountActive: state.isAccountActive,
+                    turnoverCompleted: state.turnoverCompleted,
+                    turnoverRequired: state.turnoverRequired,
+                    highestDeposit: state.highestDeposit,
+                    isBonusClaimed: state.isBonusClaimed,
+                    userId: state.userId,
+                    history: state.history
+                };
+                localStorage.setItem('treaderbooom_user_profile', JSON.stringify(dataToSave));
+            } catch (e) {
+                console.error("Storage save error:", e);
+            }
+        }
+
+        // ==========================================
+        // INITIALIZATION & ONBOARDING (Splash & Auth)
+        // ==========================================
+        window.addEventListener('DOMContentLoaded', () => {
+            loadStoredUserData();
+
+            // Extract Telegram WebApp User if available
+            const tg = window.Telegram?.WebApp;
+            if (tg) {
+                tg.ready();
+                tg.expand();
+                if (tg.initDataUnsafe?.user?.id) {
+                    state.userId = String(tg.initDataUnsafe.user.id);
+                }
+            } else {
+                if (!localStorage.getItem('treaderbooom_user_profile')) {
+                    state.userId = String(Math.floor(10000000 + Math.random() * 90000000));
+                }
+            }
+
+            // Update Dynamic Referral Link
+            updateReferralLinkUI();
+
+            // Seed Price History for chart
+            for (let i = 0; i < 30; i++) {
+                state.priceHistory.push(state.currentPrice + (Math.random() - 0.49) * (state.currentPrice * 0.0005));
+            }
+
+            resizeCanvas();
+            updateBalanceUI();
+            renderInPageHistory();
+
+            // Splash Screen Timer (2 seconds)
+            setTimeout(() => {
+                const splash = document.getElementById('splashScreen');
+                splash.classList.add('hide');
+
+                if (!state.isBonusClaimed) {
+                    document.getElementById('authOverlay').classList.add('show');
+                }
+            }, 2100);
+
+            // Start Live Stats random fluctuation every 1 minute
+            startStatsFluctuation();
+        });
+
+        function updateReferralLinkUI() {
+            const link = `https://t.me/${BOT_USERNAME}?start=${state.userId}`;
+            document.getElementById('refLinkDisplay').innerText = link;
+        }
+
+        function completeTelegramAuth() {
+            document.getElementById('authOverlay').classList.remove('show');
+            state.balance += 1.00;
+            state.isBonusClaimed = true;
+            state.history.deposits.unshift({
+                title: "Welcome Gift Bonus",
+                date: new Date().toLocaleString(),
+                amount: "+1.00 USDT",
+                status: "success"
+            });
+            saveUserData();
+            updateBalanceUI();
+
+            document.getElementById('bonusOverlay').classList.add('show');
+        }
+
+        function closeBonusModal() {
+            document.getElementById('bonusOverlay').classList.remove('show');
+            showToast("Welcome bonus 1.00 USDT ready to trade!");
+        }
+
+        function openAnnouncement() {
+            document.getElementById('announceOverlay').classList.add('show');
+        }
+
+        // ==========================================
+        // REAL-TIME CHART WITH HORIZONTAL BASELINE
+        // ==========================================
         const canvas = document.getElementById('priceChart');
         const ctx = canvas.getContext('2d');
-        
+
         function resizeCanvas() {
             canvas.width = canvas.parentElement.clientWidth;
             canvas.height = canvas.parentElement.clientHeight;
         }
         window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
 
-        // Seed initial history
-        for(let i=0; i<30; i++) {
-            state.priceHistory.push(79800 + Math.random() * 50);
-        }
-
-        // Live Simulation Loop
+        // Real-time market tick simulation
         setInterval(() => {
-            const delta = (Math.random() - 0.49) * 4;
+            const volatility = state.currentPrice * 0.0002;
+            const delta = (Math.random() - 0.495) * volatility;
             state.currentPrice += delta;
             state.priceHistory.push(state.currentPrice);
-            if(state.priceHistory.length > 40) state.priceHistory.shift();
+            if (state.priceHistory.length > 36) state.priceHistory.shift();
 
-            // Update UI elements
-            document.getElementById('btcPrice').innerText = state.currentPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            const decimals = currentPairKey.includes('DOGE') ? 5 : (currentPairKey.includes('XRP') ? 3 : 2);
+            document.getElementById('currentPriceDisplay').innerText = state.currentPrice.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+            
             drawChart();
         }, 1000);
 
         function drawChart() {
+            if (!canvas.width || !canvas.height) return;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const min = Math.min(...state.priceHistory);
+            const max = Math.max(...state.priceHistory);
+            const range = (max - min) || 1;
+
+            const baseline = state.activeTrade ? state.activeTrade.entryPrice : state.baselinePrice;
+            document.getElementById('baselinePriceText').innerText = baseline.toFixed(2);
             
-            const min = Math.min(...state.priceHistory) - 5;
-            const max = Math.max(...state.priceHistory) + 5;
-            const range = max - min;
+            const baselineY = canvas.height - ((baseline - min) / range * canvas.height * 0.75 + canvas.height * 0.12);
+            
+            ctx.beginPath();
+            ctx.setLineDash([5, 5]);
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+            ctx.lineWidth = 1.5;
+            ctx.moveTo(0, baselineY);
+            ctx.lineTo(canvas.width, baselineY);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            const indicatorEl = document.getElementById('chartIndicatorText');
+            if (state.currentPrice > baseline) {
+                indicatorEl.innerText = "ABOVE BASELINE ▲";
+                indicatorEl.style.color = "#10b981";
+            } else if (state.currentPrice < baseline) {
+                indicatorEl.innerText = "BELOW BASELINE ▼";
+                indicatorEl.style.color = "#ef4444";
+            } else {
+                indicatorEl.innerText = "AT BASELINE";
+                indicatorEl.style.color = "#94a3b8";
+            }
 
             ctx.beginPath();
             ctx.strokeStyle = '#a855f7';
             ctx.lineWidth = 2.5;
-            
+
             const stepX = canvas.width / (state.priceHistory.length - 1);
-            
             state.priceHistory.forEach((val, index) => {
                 const x = index * stepX;
-                const y = canvas.height - ((val - min) / range * canvas.height * 0.8 + canvas.height * 0.1);
-                if(index === 0) ctx.moveTo(x, y);
+                const y = canvas.height - ((val - min) / range * canvas.height * 0.75 + canvas.height * 0.12);
+                if (index === 0) ctx.moveTo(x, y);
                 else ctx.lineTo(x, y);
             });
             ctx.stroke();
 
-            // Draw current point glow
-            const lastX = canvas.width;
-            const lastY = canvas.height - ((state.currentPrice - min) / range * canvas.height * 0.8 + canvas.height * 0.1);
-            
+            const lastX = canvas.width - 2;
+            const lastY = canvas.height - ((state.currentPrice - min) / range * canvas.height * 0.75 + canvas.height * 0.12);
+
             ctx.beginPath();
-            ctx.arc(lastX - 4, lastY, 6, 0, Math.PI * 2);
-            ctx.fillStyle = '#10b981';
-            ctx.shadowColor = '#10b981';
+            ctx.arc(lastX, lastY, 5, 0, Math.PI * 2);
+            ctx.fillStyle = state.currentPrice >= baseline ? '#10b981' : '#ef4444';
+            ctx.shadowColor = ctx.fillStyle;
             ctx.shadowBlur = 10;
             ctx.fill();
             ctx.shadowBlur = 0;
         }
 
-        // Navigation Controller
-        function switchTab(tabId, el) {
-            document.querySelectorAll('.tab-section').forEach(sec => sec.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+        // ==========================================
+        // DYNAMIC COUNTERS (Fluctuating every 1 minute)
+        // ==========================================
+        function startStatsFluctuation() {
+            let onlineBase = 1258;
+            let predBase = 564;
+
+            onlineStatsInterval = setInterval(() => {
+                const onlineShift = Math.floor((Math.random() - 0.48) * 16);
+                const predShift = Math.floor((Math.random() - 0.48) * 10);
+
+                onlineBase = Math.max(1150, Math.min(1450, onlineBase + onlineShift));
+                predBase = Math.max(480, Math.min(680, predBase + predShift));
+
+                document.getElementById('statOnlineNow').innerText = onlineBase.toLocaleString();
+                document.getElementById('statLivePredictions').innerText = predBase.toLocaleString();
+            }, 60000);
+        }
+
+        // ==========================================
+        // CHANGE PAIR BOTTOM SHEET MODAL
+        // ==========================================
+        function openPairSheet() {
+            document.getElementById('pairBottomSheet').classList.add('show');
+        }
+
+        function closePairSheet(e) {
+            document.getElementById('pairBottomSheet').classList.remove('show');
+        }
+
+        function selectCryptoPair(pairKey) {
+            if (!CRYPTO_PAIRS[pairKey]) return;
+            currentPairKey = pairKey;
+            const pair = CRYPTO_PAIRS[pairKey];
+
+            document.getElementById('activePairTitle').innerText = pairKey;
+            const iconWrapper = document.getElementById('activePairIcon');
+            iconWrapper.style.background = pair.bg;
+            iconWrapper.style.color = (pairKey === 'BNB/USDT' || pairKey === 'SOL/USDT') ? '#000' : '#fff';
+            iconWrapper.innerHTML = `<i class="${pair.isBrand ? 'fa-brands' : 'fa-solid'} ${pair.icon}"></i>`;
+
+            state.currentPrice = pair.price;
+            state.baselinePrice = pair.price;
             
-            document.getElementById(`tab-${tabId}`).classList.add('active');
-            
-            if(el) {
-                el.classList.add('active');
-            } else {
-                const navIndex = ['predict', 'deposit', 'withdraw', 'invite', 'history'].indexOf(tabId);
-                document.querySelectorAll('.nav-item')[navIndex].classList.add('active');
+            state.priceHistory = [];
+            for (let i = 0; i < 30; i++) {
+                state.priceHistory.push(state.currentPrice + (Math.random() - 0.49) * (state.currentPrice * 0.0005));
             }
 
-            if(tabId === 'history') {
-                renderHistory('deposits');
+            closePairSheet();
+            drawChart();
+            showToast(`Switched pair to ${pairKey}`);
+        }
+
+        // ==========================================
+        // STAKE & TRADING SYSTEM WITH LEFT-ALIGNED CIRCULAR TIMER
+        // ==========================================
+        function setStake(amount) {
+            state.stake = parseFloat(amount);
+            document.getElementById('stakeInput').value = state.stake.toFixed(3);
+            document.getElementById('potentialWin').innerText = `+${(state.stake * 1.8).toFixed(3)} USDT`;
+
+            document.querySelectorAll('.preset-chips .chip').forEach(c => {
+                c.classList.toggle('active', parseFloat(c.innerText) === parseFloat(amount));
+            });
+        }
+
+        function onManualStakeInput(val) {
+            const num = parseFloat(val);
+            if (!isNaN(num) && num > 0) {
+                state.stake = num;
+                document.getElementById('potentialWin').innerText = `+${(state.stake * 1.8).toFixed(3)} USDT`;
+                document.querySelectorAll('.preset-chips .chip').forEach(c => {
+                    c.classList.toggle('active', parseFloat(c.innerText) === num);
+                });
             }
         }
 
-        // Stake Management
         function updateBalanceUI() {
             document.getElementById('userBalance').innerText = state.balance.toFixed(2);
+            document.getElementById('quickBalanceDisplay').innerText = state.balance.toFixed(2);
             document.getElementById('withdrawAvailable').innerText = state.balance.toFixed(2);
-            
-            // Adjust max stake cap (10% of balance or 0.04 default)
-            const maxStake = Math.max(0.001, state.balance * 0.1);
-            document.getElementById('maxStakeDisplay').innerText = maxStake.toFixed(2);
-            
-            const slider = document.getElementById('stakeSlider');
-            slider.max = maxStake.toFixed(3);
-            
-            if(state.stake > maxStake) {
-                setStake(maxStake);
-            }
         }
 
-        function setStake(val) {
-            const maxStake = Math.max(0.001, state.balance * 0.1);
-            if(val === 'MAX') {
-                state.stake = maxStake;
-            } else {
-                state.stake = parseFloat(val);
-            }
-            
-            document.getElementById('stakeValue').innerText = state.stake.toFixed(3);
-            document.getElementById('stakeSlider').value = state.stake;
-            document.getElementById('potentialWin').innerText = `+${(state.stake * 1.8).toFixed(3)} USDT`;
-            
-            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-            if(val === 'MAX') document.getElementById('chipMax').classList.add('active');
-        }
-
-        function updateStakeFromSlider(val) {
-            state.stake = parseFloat(val);
-            document.getElementById('stakeValue').innerText = state.stake.toFixed(3);
-            document.getElementById('potentialWin').innerText = `+${(state.stake * 1.8).toFixed(3)} USDT`;
-        }
-
-        // Prediction Trade System
         function startTrade(direction) {
-            if (!appConfig.tradingEnabled) { showToast('Trading is paused by admin.'); reportEvent('trade_blocked',{reason:'paused'}); return; }
-            if(state.activeTrade) {
-                showToast("Trade already in progress!");
+            if (state.activeTrade) {
+                showToast("A trade is already in progress!");
                 return;
             }
-            if(state.balance < state.stake) {
-                showToast("Insufficient balance!");
+            if (state.balance < state.stake) {
+                showToast("Insufficient balance for this stake!");
                 return;
             }
 
-            // Deduct stake balance
             state.balance -= state.stake;
+            state.turnoverCompleted += state.stake;
             updateBalanceUI();
+            saveUserData();
 
+            const duration = 60;
             state.activeTrade = {
+                pair: currentPairKey,
                 direction: direction,
                 entryPrice: state.currentPrice,
                 stake: state.stake,
-                timer: Number(appConfig.tradeDuration || 60)
+                totalDuration: duration,
+                timer: duration
             };
-            reportEvent('trade_opened',{direction,stake:state.stake,entryPrice:state.currentPrice});
-            showToast(`${direction} trade placed · ${state.stake.toFixed(3)} USDT`);
-            document.getElementById('cancelTradeBtn').style.display = appConfig.cancelEnabled ? 'flex' : 'none';
 
-            // Render Trade UI Card
-            const card = document.getElementById('activeTradeCard');
-            card.style.display = 'flex';
-            document.getElementById('tradeDirection').innerText = `${direction} (x1.8)`;
-            document.getElementById('tradeDirection').style.color = direction === 'RISE' ? '#10b981' : '#ef4444';
-            document.getElementById('entryPriceDisplay').innerText = `Entry: ${state.currentPrice.toFixed(2)}`;
+            // Setup Left-Aligned Circular Timer
+            const timerBox = document.getElementById('circularTimerBox');
+            timerBox.style.display = 'flex';
+            const dirEl = document.getElementById('circularTimerDirection');
+            dirEl.innerText = `${direction} (x1.8)`;
+            dirEl.style.color = direction === 'RISE' ? '#10b981' : '#ef4444';
+
+            document.getElementById('cancelTradeBtn').style.display = 'flex';
+            showToast(`${direction} order placed · ${state.stake.toFixed(3)} USDT`);
+
+            const circleRing = document.getElementById('circleProgressRing');
+            const circumference = 2 * Math.PI * 17; // r=17
+            circleRing.style.stroke = direction === 'RISE' ? '#10b981' : '#ef4444';
 
             tradeCountdown = setInterval(() => {
                 state.activeTrade.timer--;
-                document.getElementById('tradeTimer').innerText = `${state.activeTrade.timer}s`;
+                document.getElementById('circularTimerSeconds').innerText = `${state.activeTrade.timer}s`;
 
-                if(state.activeTrade.timer <= 0) {
-                    clearInterval(tradeCountdown); tradeCountdown = null;
+                const progress = (state.activeTrade.totalDuration - state.activeTrade.timer) / state.activeTrade.totalDuration;
+                circleRing.style.strokeDashoffset = progress * circumference;
+
+                if (state.activeTrade.timer <= 0) {
+                    clearInterval(tradeCountdown);
+                    tradeCountdown = null;
                     resolveTrade();
                 }
             }, 1000);
@@ -1523,66 +2449,211 @@
 
         function resolveTrade() {
             if (!state.activeTrade) return;
-            const trade = {...state.activeTrade};
+            const trade = { ...state.activeTrade };
             const exitPrice = state.currentPrice;
-            const isWin = trade.direction === 'RISE' ? exitPrice > trade.entryPrice : exitPrice < trade.entryPrice;
-            document.getElementById('activeTradeCard').style.display = 'none';
+            const isWin = trade.direction === 'RISE' ? (exitPrice >= trade.entryPrice) : (exitPrice <= trade.entryPrice);
+
+            document.getElementById('circularTimerBox').style.display = 'none';
             document.getElementById('cancelTradeBtn').style.display = 'none';
-            let resultAmount = 0;
-            if(isWin) { resultAmount = trade.stake * Number(appConfig.multiplier || 1.8); state.balance += resultAmount; }
-            state.history.predictions.unshift({
-                title: `Prediction ${trade.direction}`, date: new Date().toLocaleString(),
-                amount: isWin ? `+${resultAmount.toFixed(3)} USDT` : `-${trade.stake.toFixed(3)} USDT`,
+
+            let payout = 0;
+            if (isWin) {
+                payout = trade.stake * 1.8;
+                state.balance += payout;
+            }
+
+            const record = {
+                title: `${trade.pair} ${trade.direction}`,
+                date: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                amount: isWin ? `+${payout.toFixed(3)} USDT` : `-${trade.stake.toFixed(3)} USDT`,
                 status: isWin ? 'success' : 'fail'
-            });
+            };
+
+            state.history.predictions.unshift(record);
             state.activeTrade = null;
+
             updateBalanceUI();
-            showTradeResult({won:isWin, amount:resultAmount, stake:trade.stake, direction:trade.direction, entry:trade.entryPrice, exit:exitPrice});
-            reportEvent('trade_settled',{won:isWin,stake:trade.stake,payout:resultAmount,direction:trade.direction,entry:trade.entryPrice,exit:exitPrice});
+            renderInPageHistory();
+            saveUserData();
+
+            showTradeResultModal({ won: isWin, amount: payout, stake: trade.stake, direction: trade.direction, entry: trade.entryPrice, exit: exitPrice });
         }
 
         function cancelTrade() {
-            if (!state.activeTrade || !appConfig.cancelEnabled) { showToast('Trade cancellation is unavailable.'); return; }
-            clearInterval(tradeCountdown); tradeCountdown = null;
-            const trade = {...state.activeTrade};
+            if (!state.activeTrade) return;
+            clearInterval(tradeCountdown);
+            tradeCountdown = null;
+
+            const trade = { ...state.activeTrade };
             state.balance += trade.stake;
             state.activeTrade = null;
-            document.getElementById('activeTradeCard').style.display = 'none';
+
+            document.getElementById('circularTimerBox').style.display = 'none';
             document.getElementById('cancelTradeBtn').style.display = 'none';
-            state.history.predictions.unshift({title:`Trade ${trade.direction} cancelled`,date:new Date().toLocaleString(),amount:`+${trade.stake.toFixed(3)} USDT`,status:'success'});
+
             updateBalanceUI();
-            showTradeResult({won:false,amount:0,stake:trade.stake,direction:trade.direction,entry:trade.entryPrice,exit:state.currentPrice,reason:'cancelled'});
-            reportEvent('trade_cancelled',{direction:trade.direction,stake:trade.stake});
+            saveUserData();
+            showToast("Trade cancelled. Stake returned.");
         }
 
-        // Deposit Features
+        function showTradeResultModal({ won, amount, stake, direction }) {
+            const panel = document.getElementById('resultPanel');
+            panel.classList.toggle('loss', !won);
+
+            document.getElementById('resultStatus').textContent = won ? 'WIN CONFIRMED' : 'TRADE SETTLED';
+            document.getElementById('resultIcon').className = won ? 'fa-solid fa-coins' : 'fa-solid fa-chart-line-down';
+            document.getElementById('resultAmount').textContent = won ? `+${amount.toFixed(4)} USDT` : `-${stake.toFixed(4)} USDT`;
+            document.getElementById('resultTitle').textContent = won ? `You won ${amount.toFixed(4)} USDT` : 'Trade outcome did not match';
+
+            document.getElementById('winCommissionDetails').style.display = won ? 'block' : 'none';
+            document.getElementById('resultOverlay').classList.add('show');
+        }
+
+        function closeTradeResult() {
+            document.getElementById('resultOverlay').classList.remove('show');
+        }
+
+        function shareTradeResult() {
+            const wonAmount = document.getElementById('resultAmount').innerText;
+            const refLink = `https://t.me/${BOT_USERNAME}?start=${state.userId}`;
+            const shareText = `I just won ${wonAmount} on TreaderBooom! Join now using my link and claim your 1.00 USDT welcome bonus:\n${refLink}`;
+
+            const tg = window.Telegram?.WebApp;
+            if (tg && tg.openTelegramLink) {
+                tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(refLink)}&text=${encodeURIComponent(shareText)}`);
+            } else if (navigator.share) {
+                navigator.share({ title: 'TreaderBooom Win', text: shareText, url: refLink }).catch(() => {});
+            } else {
+                navigator.clipboard.writeText(shareText);
+                showToast("Result & referral link copied to clipboard!");
+            }
+        }
+
+        // ==========================================
+        // IN-PAGE MY HISTORY RENDERING
+        // ==========================================
+        function renderInPageHistory() {
+            const container = document.getElementById('inPageHistoryList');
+            const items = state.history.predictions.slice(0, 4);
+
+            if (items.length === 0) {
+                container.innerHTML = `<div style="text-align: center; color: var(--text-sub); font-size: 0.72rem; padding: 12px 0;">No predictions yet</div>`;
+                return;
+            }
+
+            container.innerHTML = items.map(item => `
+                <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); padding:8px 10px; border-radius:10px;">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <div style="width:24px; height:24px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:11px; background:${item.status === 'success' ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.15)'}; color:${item.status === 'success' ? '#10b981' : '#ef4444'};">
+                            <i class="fa-solid ${item.status === 'success' ? 'fa-arrow-trend-up' : 'fa-arrow-trend-down'}"></i>
+                        </div>
+                        <div>
+                            <div style="font-size:0.75rem; font-weight:700;">${item.title}</div>
+                            <div style="font-size:0.62rem; color:var(--text-sub);">${item.date}</div>
+                        </div>
+                    </div>
+                    <div style="font-size:0.78rem; font-weight:800; color:${item.status === 'success' ? '#10b981' : '#ffffff'};">
+                        ${item.amount}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ==========================================
+        // RELIABLE CLIPBOARD COPY FUNCTION (100% FIXED)
+        // ==========================================
+        function copyTextToClipboard(text, successMessage) {
+            if (!text) return;
+            
+            // Modern Clipboard API
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast(successMessage);
+                }).catch(() => {
+                    executeFallbackCopy(text, successMessage);
+                });
+            } else {
+                executeFallbackCopy(text, successMessage);
+            }
+        }
+
+        function executeFallbackCopy(text, successMessage) {
+            const tempInput = document.createElement("textarea");
+            tempInput.value = text;
+            tempInput.style.position = "fixed";
+            tempInput.style.left = "-9999px";
+            tempInput.style.top = "0";
+            tempInput.setAttribute('readonly', '');
+            document.body.appendChild(tempInput);
+            
+            tempInput.focus();
+            tempInput.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showToast(successMessage);
+                } else {
+                    showToast("Copied: " + text.substring(0, 12) + "...");
+                }
+            } catch (err) {
+                showToast("Could not copy automatically. Please select & copy.");
+            }
+            
+            document.body.removeChild(tempInput);
+        }
+
         function copyAddress() {
-            const text = document.getElementById('walletAddress').innerText;
-            navigator.clipboard.writeText(text);
-            showToast("Address copied to clipboard!");
+            const addr = document.getElementById('walletAddress').innerText.trim();
+            copyTextToClipboard(addr, "BEP20 Address copied to clipboard!");
         }
 
-        function simulateDeposit() {
-            state.balance += 1.00;
-            updateBalanceUI();
+        function copyRefLink() {
+            const link = document.getElementById('refLinkDisplay').innerText.trim();
+            copyTextToClipboard(link, "Referral link copied to clipboard!");
+        }
+
+        function submitDepositTxId() {
+            const txId = document.getElementById('txIdInput').value.trim();
+            const amount = parseFloat(document.getElementById('txAmountInput').value) || 0;
+
+            if (!txId || txId.length < 10) {
+                showToast("Please enter a valid Transaction Hash (TxID)");
+                return;
+            }
+            if (amount < 1.0) {
+                showToast("Minimum deposit amount is 1.00 USDT");
+                return;
+            }
+
+            // Activate Account Silently Upon First Deposit
+            state.isAccountActive = true;
+
+            // Turnover Rule
+            if (amount > 4.00) {
+                state.turnoverRequired = 7.00;
+                if (amount > state.highestDeposit) state.highestDeposit = amount;
+            }
+
+            state.balance += amount;
             state.history.deposits.unshift({
                 title: "USDT Deposit (BEP20)",
-                date: new Date().toLocaleString(),
-                amount: "+1.00 USDT",
+                date: new Date().toLocaleDateString(),
+                amount: `+${amount.toFixed(2)} USDT`,
                 status: "success"
             });
-            showToast("Demo deposit credited: +1.00 USDT");
-            reportEvent('demo_deposit',{amount:1.00});
+
+            document.getElementById('txIdInput').value = "";
+            document.getElementById('txAmountInput').value = "";
+
+            updateBalanceUI();
+            saveUserData();
+            showToast(`Deposit submitted & credited: +${amount.toFixed(2)} USDT`);
         }
 
-        // QRCode Generator Init
-        new QRCode(document.getElementById("qrcode"), {
-            text: "0x5643C21852b73aE93F57E1F7a8b74b47Fe253e0d",
-            width: 140,
-            height: 140
-        });
-
-        // Withdrawal Handling
+        // ==========================================
+        // WITHDRAWAL VALIDATION
+        // ==========================================
         function calculateWithdrawal() {
             const amount = parseFloat(document.getElementById('withdrawAmount').value) || 0;
             const receive = Math.max(0, amount - 0.30);
@@ -1598,7 +2669,7 @@
             navigator.clipboard.readText().then(text => {
                 document.getElementById('withdrawAddress').value = text;
             }).catch(() => {
-                showToast("Unable to read clipboard");
+                showToast("Paste permission denied");
             });
         }
 
@@ -1606,35 +2677,70 @@
             const amount = parseFloat(document.getElementById('withdrawAmount').value) || 0;
             const addr = document.getElementById('withdrawAddress').value;
 
-            if(amount < 5.0) {
+            if (!state.isAccountActive) {
+                alert("Account Activation Required:\n\nTo enable withdrawals, please complete your first deposit on BNB Smart Chain (BEP20).");
+                switchTab('deposit');
+                return;
+            }
+
+            if (state.highestDeposit > 4.00 && state.turnoverCompleted < 7.00) {
+                const remaining = (7.00 - state.turnoverCompleted).toFixed(2);
+                alert(`Turnover Requirement Not Met:\n\nBecause your deposit exceeded 4.00 USDT, a minimum trading turnover of 7.00 USDT is required before withdrawing.\n\nCompleted: ${state.turnoverCompleted.toFixed(2)} / 7.00 USDT\nRemaining to trade: ${remaining} USDT`);
+                return;
+            }
+
+            if (amount < 5.0) {
                 showToast("Minimum withdrawal is 5.00 USDT");
                 return;
             }
-            if(amount > state.balance) {
+            if (amount > state.balance) {
                 showToast("Insufficient balance");
                 return;
             }
-            if(!addr || addr.length < 10) {
-                showToast("Enter a valid BEP20 address");
+            if (!addr || addr.length < 15) {
+                showToast("Enter a valid BEP20 USDT address");
                 return;
             }
 
             state.balance -= amount;
             updateBalanceUI();
-            showToast("Demo withdrawal request submitted.");
-            reportEvent('demo_withdrawal_requested',{amount,address:addr});
+            state.history.deposits.unshift({
+                title: "USDT Withdrawal",
+                date: new Date().toLocaleDateString(),
+                amount: `-${amount.toFixed(2)} USDT`,
+                status: "success"
+            });
+            saveUserData();
+
+            showToast("Withdrawal request submitted successfully.");
             document.getElementById('withdrawAmount').value = "";
             calculateWithdrawal();
         }
 
-        // Invite Link Copy
-        function copyRefLink() {
-            const refText = document.getElementById('refLink').innerText;
-            navigator.clipboard.writeText(refText);
-            showToast("Referral link copied!");
+        // ==========================================
+        // TAB & NAVIGATION CONTROLLER
+        // ==========================================
+        function switchTab(tabId, el) {
+            document.querySelectorAll('.tab-section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+
+            if (el) {
+                el.classList.add('active');
+            } else {
+                const navIndex = ['predict', 'deposit', 'withdraw', 'invite', 'history'].indexOf(tabId);
+                if (navIndex >= 0) document.querySelectorAll('.nav-item')[navIndex].classList.add('active');
+            }
+
+            if (tabId === 'history') {
+                renderHistory('deposits');
+            }
         }
 
-        // History View Rendering
+        // ==========================================
+        // DYNAMIC HISTORY TAB RENDERING
+        // ==========================================
         function switchHistoryTab(type, el) {
             document.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
             el.classList.add('active');
@@ -1645,41 +2751,48 @@
             const container = document.getElementById('historyContent');
             const data = state.history[type] || [];
 
-            if(data.length === 0) {
+            if (data.length === 0) {
                 container.innerHTML = `<div style="text-align: center; color: var(--text-sub); padding: 40px 0; font-size: 0.8rem;">No records found</div>`;
                 return;
             }
 
-            container.innerHTML = data.map(item => `
-                <div class="history-item">
-                    <div class="history-left">
-                        <div class="history-icon" style="background: ${item.status === 'success' ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.15)'}; color: ${item.status === 'success' ? '#10b981' : '#ef4444'};">
-                            <i class="fa-solid ${item.status === 'success' ? 'fa-arrow-down-left' : 'fa-arrow-up-right'}"></i>
+            container.innerHTML = data.map(item => {
+                let iconClass = 'fa-solid fa-arrow-down';
+                if (type === 'predictions') {
+                    iconClass = item.status === 'success' ? 'fa-solid fa-arrow-trend-up' : 'fa-solid fa-arrow-trend-down';
+                } else if (type === 'invitations') {
+                    iconClass = 'fa-solid fa-user-plus';
+                } else if (type === 'deposits' && item.title.includes('Withdrawal')) {
+                    iconClass = 'fa-solid fa-arrow-up';
+                }
+
+                return `
+                    <div class="history-item">
+                        <div class="history-left">
+                            <div class="history-icon" style="background: ${item.status === 'success' ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.15)'}; color: ${item.status === 'success' ? '#10b981' : '#ef4444'};">
+                                <i class="${iconClass}"></i>
+                            </div>
+                            <div>
+                                <div class="history-title">${item.title}</div>
+                                <div class="history-date">${item.date}</div>
+                            </div>
                         </div>
-                        <div>
-                            <div class="history-title">${item.title}</div>
-                            <div class="history-date">${item.date}</div>
+                        <div class="history-amount" style="color: ${item.status === 'success' ? '#10b981' : '#ffffff'};">
+                            ${item.amount}
                         </div>
                     </div>
-                    <div class="history-amount" style="color: ${item.status === 'success' ? '#10b981' : '#ffffff'};">
-                        ${item.amount}
-                    </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
-        // Global Toast Trigger
         function showToast(msg) {
             const toast = document.getElementById('toast');
             toast.innerText = msg;
             toast.classList.add('show');
             setTimeout(() => {
                 toast.classList.remove('show');
-            }, 2500);
+            }, 2600);
         }
-
-        // Initialize Screen State
-        updateBalanceUI();
     </script>
 </body>
 </html>
