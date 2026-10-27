@@ -2032,7 +2032,7 @@
             turnoverRequired: 0.00,
             highestDeposit: 0.00,
             isBonusClaimed: false,
-            userId: '10984218',
+            userId: null,
             redeemedCodes: [],
             history: {
                 deposits: [],
@@ -2056,10 +2056,14 @@
             window.location.href = `https://t.me/${BOT_USERNAME}`;
         }
 
-        // Load Persisted User Profile
+        // Each Telegram account gets its own isolated profile and welcome-bonus status.
+        let userStorageKey = null;
+
         function loadStoredUserData() {
             try {
-                const saved = localStorage.getItem('treaderbooom_user_profile');
+                if (!state.userId) return;
+                userStorageKey = `treaderbooom_user_profile_${state.userId}`;
+                const saved = localStorage.getItem(userStorageKey);
                 if (saved) {
                     const data = JSON.parse(saved);
                     state.balance = data.balance ?? 0.00;
@@ -2068,7 +2072,8 @@
                     state.turnoverRequired = data.turnoverRequired ?? 0.00;
                     state.highestDeposit = data.highestDeposit ?? 0.00;
                     state.isBonusClaimed = !!data.isBonusClaimed;
-                    state.userId = data.userId || state.userId;
+                    // The Telegram ID comes from the current Telegram session, never from saved/admin defaults.
+                    state.userId = String(state.userId);
                     state.redeemedCodes = data.redeemedCodes || [];
                     if (data.history) state.history = data.history;
                 }
@@ -2079,6 +2084,8 @@
 
         function saveUserData() {
             try {
+                if (!state.userId) return;
+                userStorageKey = userStorageKey || `treaderbooom_user_profile_${state.userId}`;
                 const dataToSave = {
                     balance: state.balance,
                     isAccountActive: state.isAccountActive,
@@ -2090,7 +2097,7 @@
                     redeemedCodes: state.redeemedCodes,
                     history: state.history
                 };
-                localStorage.setItem('treaderbooom_user_profile', JSON.stringify(dataToSave));
+                localStorage.setItem(userStorageKey, JSON.stringify(dataToSave));
             } catch (e) {
                 console.error("Storage save error:", e);
             }
@@ -2103,18 +2110,25 @@
             // Verify Telegram mini app restriction
             checkTelegramEnvironment();
 
-            loadStoredUserData();
-
             const tg = window.Telegram?.WebApp;
             if (tg) {
                 tg.ready();
                 tg.expand();
-                if (tg.initDataUnsafe?.user?.id) {
-                    state.userId = String(tg.initDataUnsafe.user.id);
+                // Telegram supplies a unique ID for the account currently opening this Mini App.
+                const telegramUserId = tg.initDataUnsafe?.user?.id;
+                if (telegramUserId !== undefined && telegramUserId !== null) {
+                    state.userId = String(telegramUserId);
                 }
             }
 
-            updateReferralLinkUI();
+            if (state.userId) {
+                loadStoredUserData();
+                updateReferralLinkUI();
+            } else {
+                // Never fall back to a hard-coded admin/user ID when Telegram identity is unavailable.
+                document.getElementById('tgGateOverlay').style.display = 'flex';
+                document.getElementById('authOverlay').classList.remove('show');
+            }
 
             // Populate stable price history
             state.priceHistory = [];
@@ -2130,7 +2144,7 @@
                 const splash = document.getElementById('splashScreen');
                 splash.classList.add('hide');
 
-                if (!state.isBonusClaimed) {
+                if (state.userId && !state.isBonusClaimed) {
                     document.getElementById('authOverlay').classList.add('show');
                 }
             }, 2100);
@@ -2144,6 +2158,15 @@
         }
 
         function completeTelegramAuth() {
+            // Do not create a shared profile or award a bonus without Telegram account identity.
+            if (!state.userId || !window.Telegram?.WebApp?.initDataUnsafe?.user?.id) {
+                showToast('Please open this app from your Telegram account.');
+                return;
+            }
+            if (state.isBonusClaimed) {
+                document.getElementById('authOverlay').classList.remove('show');
+                return;
+            }
             document.getElementById('authOverlay').classList.remove('show');
             state.balance += 1.00;
             state.isBonusClaimed = true;
@@ -2183,7 +2206,8 @@
 
         // Real-time market tick
         setInterval(() => {
-            const volatility = state.currentPrice * 0.0002;
+            // Slower, smoother chart movement.
+            const volatility = state.currentPrice * 0.00012;
             const delta = (Math.random() - 0.495) * volatility;
             state.currentPrice += delta;
             state.priceHistory.push(state.currentPrice);
@@ -2193,7 +2217,7 @@
             document.getElementById('currentPriceDisplay').innerText = state.currentPrice.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
             
             drawChart();
-        }, 1000);
+        }, 1800);
 
         function drawChart() {
             if (!canvas.width || !canvas.height) {
@@ -2224,7 +2248,7 @@
             ctx.beginPath();
             ctx.setLineDash([5, 5]);
             ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-            ctx.lineWidth = 1.5;
+            ctx.lineWidth = 2.6;
             ctx.moveTo(0, baselineY);
             ctx.lineTo(canvas.width, baselineY);
             ctx.stroke();
@@ -2247,7 +2271,7 @@
             // Draw Price Trendline
             ctx.beginPath();
             ctx.strokeStyle = strokeColor;
-            ctx.lineWidth = 2.5;
+            ctx.lineWidth = 4.0;
 
             const stepX = canvas.width / Math.max(state.priceHistory.length - 1, 1);
             state.priceHistory.forEach((val, index) => {
