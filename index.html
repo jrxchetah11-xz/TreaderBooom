@@ -1115,122 +1115,57 @@
             text-align: right;
         }
 
-        /* Bottom Navigation Bar — redesigned to match the reference screenshot */
+        /* Bottom Navigation Bar */
         .bottom-nav {
             position: absolute;
-            bottom: 10px;
-            left: 12px;
-            right: 12px;
-            height: 78px;
-            background: linear-gradient(145deg, rgba(35, 20, 58, 0.97), rgba(17, 10, 34, 0.98));
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            border: 1px solid rgba(166, 111, 255, 0.48);
-            border-radius: 28px;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 65px;
+            background: rgba(15, 10, 30, 0.95);
+            backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(138, 92, 246, 0.15);
             display: flex;
             align-items: center;
             justify-content: space-around;
-            padding: 5px 7px;
+            padding: 0 8px;
             z-index: 30;
-            box-shadow: 0 -5px 24px rgba(126, 54, 210, 0.13),
-                        0 10px 30px rgba(0, 0, 0, 0.45),
-                        inset 0 1px 0 rgba(255, 255, 255, 0.08);
         }
 
         .nav-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            gap: 5px;
-            color: #b7a9d0;
-            font-size: 0.72rem;
-            font-weight: 700;
+            gap: 4px;
+            color: var(--text-sub);
+            font-size: 0.65rem;
+            font-weight: 600;
             cursor: pointer;
             width: 20%;
-            min-width: 0;
-            height: 64px;
-            padding: 5px 2px;
-            border: 1px solid transparent;
-            border-radius: 22px;
-            transition: background 0.22s ease, border-color 0.22s ease,
-                        box-shadow 0.22s ease, transform 0.22s ease, color 0.22s ease;
-            -webkit-tap-highlight-color: transparent;
+            padding: 6px 0;
+            border-radius: 12px;
+            transition: all 0.2s;
         }
 
         .nav-icon {
-            font-size: 23px;
-            width: 32px;
-            height: 30px;
+            font-size: 16px;
+            width: 24px;
+            height: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: transform 0.22s ease, filter 0.22s ease;
-            filter: drop-shadow(0 0 5px currentColor);
-        }
-
-        /* Individual neon icon colors, inspired by the supplied reference */
-        .nav-item:nth-child(1) .nav-icon {
-            color: #28f0c2;
-            filter: drop-shadow(0 0 4px rgba(0, 255, 200, 0.9))
-                    drop-shadow(0 0 9px rgba(133, 64, 255, 0.7));
-        }
-
-        .nav-item:nth-child(2) .nav-icon {
-            color: #32e8d0;
-            filter: drop-shadow(0 0 6px rgba(0, 238, 220, 0.75));
-        }
-
-        .nav-item:nth-child(3) .nav-icon {
-            color: #ffd45c;
-            filter: drop-shadow(0 0 6px rgba(255, 190, 45, 0.8));
-        }
-
-        .nav-item:nth-child(4) .nav-icon {
-            color: #b98aff;
-            filter: drop-shadow(0 0 6px rgba(158, 84, 255, 0.9));
-        }
-
-        .nav-item:nth-child(5) .nav-icon {
-            color: #a88cff;
-            filter: drop-shadow(0 0 6px rgba(133, 72, 255, 0.9));
+            transition: all 0.2s;
         }
 
         .nav-item.active {
-            color: #ffffff;
-            background: linear-gradient(155deg, rgba(142, 75, 205, 0.94), rgba(73, 36, 117, 0.88));
-            border-color: rgba(210, 164, 255, 0.62);
-            box-shadow: 0 0 18px rgba(156, 76, 231, 0.4),
-                        inset 0 1px 0 rgba(255, 255, 255, 0.17);
+            color: white;
+            background: linear-gradient(180deg, rgba(138, 92, 246, 0.3) 0%, rgba(138, 92, 246, 0.05) 100%);
+            border: 1px solid rgba(138, 92, 246, 0.4);
         }
 
         .nav-item.active .nav-icon {
-            transform: translateY(-1px) scale(1.08);
-        }
-
-        .nav-item:active {
-            transform: scale(0.96);
-        }
-
-        @media (max-width: 360px) {
-            .bottom-nav {
-                left: 8px;
-                right: 8px;
-                bottom: 8px;
-                height: 74px;
-                padding: 4px;
-                border-radius: 24px;
-            }
-
-            .nav-item {
-                height: 62px;
-                gap: 4px;
-                font-size: 0.66rem;
-            }
-
-            .nav-icon {
-                font-size: 21px;
-            }
+            color: #a855f7;
+            transform: translateY(-1px);
         }
 
         /* Toast Notifications */
@@ -1464,6 +1399,77 @@
             flex-direction: column;
             gap: 12px;
         }
+
+        /* Reference-inspired chart + floating bottom navigation (only requested areas) */
+        .chart-container {
+            height: clamp(245px, 42vh, 340px);
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 10px 0 8px;
+            background:
+                radial-gradient(ellipse at 50% 0%, rgba(119, 43, 117, .30), transparent 65%),
+                linear-gradient(180deg, rgba(69, 27, 71, .78), rgba(24, 12, 35, .96));
+            border: 1px solid rgba(207, 91, 157, .24);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.035), 0 8px 22px rgba(0,0,0,.18);
+        }
+        canvas#priceChart { display:block; width:100%; height:100%; }
+        .bottom-nav {
+            position: absolute;
+            left: 12px;
+            right: 12px;
+            bottom: max(8px, env(safe-area-inset-bottom));
+            height: 78px;
+            padding: 6px 7px;
+            gap: 2px;
+            border: 1px solid rgba(170, 115, 226, .58);
+            border-radius: 28px;
+            background: linear-gradient(145deg, rgba(39, 22, 63, .97), rgba(19, 11, 36, .98));
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            box-shadow: 0 -5px 22px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.08);
+        }
+        .nav-item {
+            width: 20%;
+            min-width: 0;
+            height: 100%;
+            padding: 7px 2px 5px;
+            gap: 3px;
+            border: 1px solid transparent;
+            border-radius: 21px;
+            color: #b9accd;
+            font-size: .68rem;
+            font-weight: 700;
+            justify-content: center;
+        }
+        .nav-icon {
+            width: 32px;
+            height: 32px;
+            font-size: 21px;
+            color: #a78bfa;
+            filter: drop-shadow(0 0 5px currentColor);
+            text-shadow: 0 0 8px currentColor;
+        }
+        .nav-item:nth-child(1) .nav-icon { color:#39f5b0; }
+        .nav-item:nth-child(2) .nav-icon { color:#42eacb; }
+        .nav-item:nth-child(3) .nav-icon { color:#ffd166; }
+        .nav-item:nth-child(4) .nav-icon { color:#b98aff; }
+        .nav-item:nth-child(5) .nav-icon { color:#a78bfa; }
+        .nav-item.active {
+            color: #fff;
+            border-color: rgba(210, 165, 255, .75);
+            background: linear-gradient(155deg, rgba(143, 75, 196, .82), rgba(75, 37, 111, .82));
+            box-shadow: 0 0 20px rgba(159, 83, 219, .28), inset 0 1px 0 rgba(255,255,255,.16);
+        }
+        .nav-item.active .nav-icon {
+            transform: translateY(-1px) scale(1.08);
+            filter: drop-shadow(0 0 7px currentColor);
+        }
+        .main-content { padding-bottom: 100px; }
+        @media (max-height: 700px) {
+            .chart-container { height: 230px; }
+            .bottom-nav { height: 70px; }
+        }
+
     </style>
 </head>
 <body>
@@ -2289,75 +2295,101 @@
                 resizeCanvas();
                 if (!canvas.width || !canvas.height) return;
             }
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+            const w = canvas.width, h = canvas.height;
+            ctx.clearRect(0, 0, w, h);
             if (!state.priceHistory || state.priceHistory.length < 2) return;
+
+            // Soft chart grid like the reference UI
+            ctx.save();
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = 'rgba(186, 151, 208, 0.075)';
+            for (let x = 0; x <= w; x += Math.max(42, w / 5)) {
+                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+            }
+            for (let y = 0; y <= h; y += Math.max(34, h / 5)) {
+                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+            }
 
             let min = Math.min(...state.priceHistory);
             let max = Math.max(...state.priceHistory);
-
             if (min === max || !isFinite(min) || !isFinite(max)) {
                 min = state.currentPrice * 0.999;
                 max = state.currentPrice * 1.001;
             }
+            const padding = (max - min) * 0.22 || state.currentPrice * 0.0005;
+            const plotMin = min - padding, plotMax = max + padding;
+            const range = plotMax - plotMin || 1;
+            const yFor = val => h - ((val - plotMin) / range * (h - 14)) - 7;
+            const stepX = w / Math.max(state.priceHistory.length - 1, 1);
+            const points = state.priceHistory.map((val, index) => ({
+                x: index * stepX, y: yFor(val)
+            }));
 
-            const padding = (max - min) * 0.15 || state.currentPrice * 0.0004;
-            const plotMin = min - padding;
-            const plotMax = max + padding;
-            const range = (plotMax - plotMin) || 1;
-
-            // Draw Central Reference Baseline
+            // Dashed reference / entry price
             const baseline = state.activeTrade ? state.activeTrade.entryPrice : state.baselinePrice;
-            const baselineY = canvas.height - ((baseline - plotMin) / range * canvas.height);
-            
+            const baselineY = yFor(baseline);
             ctx.beginPath();
             ctx.setLineDash([5, 5]);
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-            ctx.lineWidth = 2.6;
-            ctx.moveTo(0, baselineY);
-            ctx.lineTo(canvas.width, baselineY);
-            ctx.stroke();
+            ctx.strokeStyle = 'rgba(56, 220, 194, .52)';
+            ctx.lineWidth = 1.4;
+            ctx.moveTo(0, baselineY); ctx.lineTo(w, baselineY); ctx.stroke();
             ctx.setLineDash([]);
 
-            // 1. Dynamic Chart Candle Color based on User's Trade Direction
-            let strokeColor = '#a855f7'; // Default purple
+            let strokeColor = '#ff397f';
             if (state.activeTrade) {
-                const isFavorable = state.activeTrade.direction === 'RISE' 
-                    ? (state.currentPrice >= state.activeTrade.entryPrice)
-                    : (state.currentPrice <= state.activeTrade.entryPrice);
-
-                strokeColor = isFavorable ? '#10b981' : '#ef4444';
-
-                // Synchronize circular progress ring color
+                const favorable = state.activeTrade.direction === 'RISE'
+                    ? state.currentPrice >= state.activeTrade.entryPrice
+                    : state.currentPrice <= state.activeTrade.entryPrice;
+                strokeColor = favorable ? '#10e6a0' : '#ff397f';
                 const circleRing = document.getElementById('circleProgressRing');
-                if (circleRing) circleRing.style.stroke = strokeColor;
+                if (circleRing) circleRing.style.stroke = favorable ? '#10e6a0' : '#ff397f';
             }
 
-            // Draw Price Trendline
+            // Filled area beneath the stepped price line
             ctx.beginPath();
-            ctx.strokeStyle = strokeColor;
-            ctx.lineWidth = 4.0;
+            ctx.moveTo(points[0].x, points[0].y);
+            for (let i = 1; i < points.length; i++) {
+                const midX = (points[i - 1].x + points[i].x) / 2;
+                ctx.lineTo(midX, points[i - 1].y);
+                ctx.lineTo(midX, points[i].y);
+                ctx.lineTo(points[i].x, points[i].y);
+            }
+            ctx.lineTo(w, h); ctx.lineTo(0, h); ctx.closePath();
+            const area = ctx.createLinearGradient(0, 0, 0, h);
+            area.addColorStop(0, 'rgba(255, 54, 126, .30)');
+            area.addColorStop(.65, 'rgba(190, 35, 102, .13)');
+            area.addColorStop(1, 'rgba(44, 13, 43, .02)');
+            ctx.fillStyle = area; ctx.fill();
 
-            const stepX = canvas.width / Math.max(state.priceHistory.length - 1, 1);
-            state.priceHistory.forEach((val, index) => {
-                const x = index * stepX;
-                const y = canvas.height - ((val - plotMin) / range * canvas.height);
-                if (index === 0) ctx.moveTo(x, y);
-                else ctx.lineTo(x, y);
-            });
+            // Neon stepped line with outer glow
+            ctx.beginPath();
+            ctx.moveTo(points[0].x, points[0].y);
+            for (let i = 1; i < points.length; i++) {
+                const midX = (points[i - 1].x + points[i].x) / 2;
+                ctx.lineTo(midX, points[i - 1].y);
+                ctx.lineTo(midX, points[i].y);
+                ctx.lineTo(points[i].x, points[i].y);
+            }
+            ctx.lineJoin = 'round';
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = strokeColor;
+            ctx.lineWidth = 5;
+            ctx.shadowColor = strokeColor;
+            ctx.shadowBlur = 13;
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+            ctx.strokeStyle = 'rgba(255, 180, 211, .78)';
+            ctx.lineWidth = 1.25;
             ctx.stroke();
 
-            // Draw Glowing Live Head Dot
-            const lastX = canvas.width - 2;
-            const lastY = canvas.height - ((state.currentPrice - plotMin) / range * canvas.height);
-
-            ctx.beginPath();
-            ctx.arc(lastX, lastY, 5, 0, Math.PI * 2);
-            ctx.fillStyle = strokeColor;
-            ctx.shadowColor = strokeColor;
-            ctx.shadowBlur = 10;
-            ctx.fill();
+            // White/pink glowing live endpoint
+            const last = points[points.length - 1];
+            ctx.beginPath(); ctx.arc(last.x, last.y, 12, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(255, 57, 127, .18)'; ctx.fill();
+            ctx.beginPath(); ctx.arc(last.x, last.y, 7, 0, Math.PI * 2);
+            ctx.fillStyle = '#fff'; ctx.shadowColor = strokeColor; ctx.shadowBlur = 15; ctx.fill();
             ctx.shadowBlur = 0;
+            ctx.restore();
         }
 
         // ==========================================
