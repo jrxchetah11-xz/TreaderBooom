@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>TreaderBooom</title>
     <!-- Permanent App Favicon -->
-    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="icon" type="image/png" href="app_logo.png">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -107,19 +107,18 @@
 
         .splash-logo-glow {
             position: absolute;
-            inset: -8px;
+            inset: -10px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(168,85,247,0.4) 0%, rgba(16,185,129,0.2) 60%, transparent 80%);
+            background: radial-gradient(circle, rgba(168,85,247,0.5) 0%, rgba(16,185,129,0.3) 60%, transparent 80%);
             animation: pulse-glow 2s infinite alternate;
         }
 
         .splash-logo-img {
-            width: 115px;
-            height: 115px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid rgba(168,85,247,0.6);
-            box-shadow: 0 0 35px rgba(168,85,247,0.6);
+            box-shadow: 0 0 35px rgba(168,85,247,0.7);
             z-index: 2;
         }
 
@@ -176,9 +175,7 @@
             padding: 20px;
         }
 
-        .auth-overlay.show {
-            display: flex;
-        }
+        .auth-overlay.show { display: flex; }
 
         .auth-card {
             width: 100%;
@@ -192,8 +189,8 @@
         }
 
         .auth-logo {
-            width: 75px;
-            height: 75px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             margin: 0 auto 16px;
             box-shadow: 0 0 25px rgba(168,85,247,0.5);
@@ -231,9 +228,7 @@
             padding: 20px;
         }
 
-        .bonus-overlay.show {
-            display: flex;
-        }
+        .bonus-overlay.show { display: flex; }
 
         .bonus-panel {
             width: 100%;
@@ -268,15 +263,14 @@
         }
 
         .brand-icon-wrapper {
-            width: 34px;
-            height: 34px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             box-shadow: 0 0 12px rgba(168, 85, 247, 0.6);
             overflow: hidden;
-            border: 1px solid rgba(168, 85, 247, 0.5);
         }
 
         .brand-icon-wrapper img {
@@ -285,13 +279,8 @@
             object-fit: cover;
         }
 
-        .brand span:nth-child(2) {
-            color: #fff;
-        }
-
-        .brand span.highlight {
-            color: #10b981;
-        }
+        .brand span:nth-child(2) { color: #fff; }
+        .brand span.highlight { color: #10b981; }
 
         .header-actions {
             display: flex;
@@ -364,21 +353,18 @@
             box-shadow: 0 0 6px #ef4444;
         }
 
-        /* Main Scrollable Content Area */
+        /* Main Content */
         .main-content {
             flex: 1;
             overflow-y: auto;
-            padding: 12px 14px 80px 14px;
+            padding: 12px 14px 105px 14px;
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
 
-        .main-content::-webkit-scrollbar {
-            display: none;
-        }
+        .main-content::-webkit-scrollbar { display: none; }
 
-        /* Cards Base Style */
         .card {
             background: var(--bg-card);
             border: 1px solid var(--bg-card-border);
@@ -389,7 +375,7 @@
             overflow: hidden;
         }
 
-        /* TAB 1: PREDICT STYLING */
+        /* TAB 1: PREDICT */
         .pair-selector {
             display: flex;
             justify-content: space-between;
@@ -416,9 +402,7 @@
             transition: 0.2s;
         }
 
-        .pair-dropdown:active {
-            transform: scale(0.97);
-        }
+        .pair-dropdown:active { transform: scale(0.97); }
 
         .coin-icon {
             width: 24px;
@@ -432,10 +416,7 @@
             font-weight: bold;
         }
 
-        .price-display {
-            text-align: right;
-        }
-
+        .price-display { text-align: right; }
         .current-price {
             font-size: 1.45rem;
             font-weight: 800;
@@ -452,7 +433,7 @@
             gap: 4px;
         }
 
-        /* CIRCULAR TIMER (Positioned on the Left, right below Pair) */
+        /* Circular Timer */
         .circular-timer-wrapper {
             display: none;
             align-items: center;
@@ -464,30 +445,15 @@
             width: fit-content;
         }
 
-        .circle-svg-box {
-            position: relative;
-            width: 38px;
-            height: 38px;
-        }
-
-        .circle-svg-box svg {
-            transform: rotate(-90deg);
-            width: 38px;
-            height: 38px;
-        }
-
-        .circle-bg {
-            fill: none;
-            stroke: rgba(255, 255, 255, 0.1);
-            stroke-width: 3.5;
-        }
-
+        .circle-svg-box { position: relative; width: 38px; height: 38px; }
+        .circle-svg-box svg { transform: rotate(-90deg); width: 38px; height: 38px; }
+        .circle-bg { fill: none; stroke: rgba(255, 255, 255, 0.1); stroke-width: 3.5; }
         .circle-progress {
             fill: none;
             stroke: #a855f7;
             stroke-width: 3.5;
             stroke-linecap: round;
-            stroke-dasharray: 100.5; /* 2 * PI * 16 */
+            stroke-dasharray: 100.5;
             stroke-dashoffset: 0;
             transition: stroke-dashoffset 1s linear, stroke 0.3s;
         }
@@ -505,21 +471,21 @@
 
         /* Chart Area */
         .chart-container {
-            width: 100%;
-            height: 180px;
-            position: relative;
-            margin: 6px 0;
+            height: clamp(230px, 38vh, 320px);
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 10px 0 8px;
+            background: radial-gradient(ellipse at 50% 0%, rgba(119, 43, 117, .30), transparent 65%), linear-gradient(180deg, rgba(69, 27, 71, .78), rgba(24, 12, 35, .96));
+            border: 1px solid rgba(207, 91, 157, .24);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.035), 0 8px 22px rgba(0,0,0,.18);
         }
 
-        canvas#priceChart {
-            width: 100%;
-            height: 100%;
-        }
+        canvas#priceChart { display: block; width: 100%; height: 100%; }
 
         .online-stats {
             display: flex;
             gap: 10px;
-            margin-top: 10px;
+            margin-top: 6px;
         }
 
         .stat-pill {
@@ -534,17 +500,8 @@
             gap: 6px;
         }
 
-        .stat-pill strong {
-            color: white;
-        }
-
-        .dot-live {
-            width: 6px;
-            height: 6px;
-            background: #10b981;
-            border-radius: 50%;
-            box-shadow: 0 0 8px #10b981;
-        }
+        .stat-pill strong { color: white; }
+        .dot-live { width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 8px #10b981; }
 
         /* Stake Controls Card */
         .stake-header {
@@ -575,7 +532,6 @@
             text-align: center;
         }
 
-        /* Fixed Preset Stake Chips */
         .preset-chips {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -601,55 +557,54 @@
             color: #a855f7;
         }
 
-        /* Action Buttons: Rise / Fall */
-        .action-buttons {
+        /* CUSTOM 3D IMAGE TRADING BUTTONS: RISE (UP) / FALL (DOWN) */
+        .action-buttons-img-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 12px;
             margin-top: 6px;
         }
 
-        .btn-predict {
+        .btn-img-trade {
+            background: transparent;
             border: none;
-            border-radius: 14px;
-            padding: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+            padding: 0;
             cursor: pointer;
-            font-weight: 800;
-            font-size: 1rem;
-            color: white;
-            transition: transform 0.1s, box-shadow 0.2s;
+            position: relative;
+            outline: none;
+            transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.2s;
+            border-radius: 16px;
+            overflow: visible;
         }
 
-        .btn-predict:active {
-            transform: scale(0.98);
-        }
-
-        .btn-rise {
-            background: linear-gradient(135deg, #10b981, #059669);
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-        }
-
-        .btn-fall {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
-        }
-
-        .multiplier-badge {
-            font-size: 0.7rem;
-            opacity: 0.9;
-            font-weight: 600;
+        .btn-img-trade img {
+            width: 100%;
+            height: auto;
+            max-height: 64px;
+            object-fit: contain;
             display: block;
+            border-radius: 14px;
+            transition: filter 0.2s;
+        }
+
+        .btn-img-trade.btn-rise-img img {
+            filter: drop-shadow(0 4px 14px rgba(16, 185, 129, 0.35));
+        }
+
+        .btn-img-trade.btn-fall-img img {
+            filter: drop-shadow(0 4px 14px rgba(239, 68, 68, 0.35));
+        }
+
+        .btn-img-trade:active {
+            transform: scale(0.93) translateY(2px);
+        }
+
+        .btn-img-trade:active img {
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.6));
         }
 
         /* IN-PAGE MY HISTORY */
-        .my-history-section {
-            margin-top: 6px;
-        }
-
+        .my-history-section { margin-top: 6px; }
         .my-history-header {
             display: flex;
             justify-content: space-between;
@@ -659,14 +614,9 @@
             font-weight: 700;
             color: var(--text-main);
         }
+        .my-history-list { display: flex; flex-direction: column; gap: 6px; }
 
-        .my-history-list {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        /* CHANGE PAIR BOTTOM SHEET MODAL */
+        /* CHANGE PAIR BOTTOM SHEET */
         .bottom-sheet-overlay {
             position: fixed;
             inset: 0;
@@ -678,9 +628,7 @@
             justify-content: center;
         }
 
-        .bottom-sheet-overlay.show {
-            display: flex;
-        }
+        .bottom-sheet-overlay.show { display: flex; }
 
         .bottom-sheet {
             width: 100%;
@@ -723,11 +671,7 @@
             font-size: 20px;
         }
 
-        .sheet-title {
-            text-align: center;
-            font-size: 1.1rem;
-            font-weight: 800;
-        }
+        .sheet-title { text-align: center; font-size: 1.1rem; font-weight: 800; }
 
         .pair-list-item {
             display: flex;
@@ -746,11 +690,7 @@
             border-color: rgba(168, 85, 247, 0.4);
         }
 
-        .pair-item-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+        .pair-item-left { display: flex; align-items: center; gap: 12px; }
 
         .btn-sheet-close {
             background: rgba(255, 255, 255, 0.07);
@@ -765,7 +705,7 @@
             margin-top: 6px;
         }
 
-        /* TAB 2: DEPOSIT STYLING */
+        /* TAB 2: DEPOSIT */
         .deposit-banner {
             display: flex;
             align-items: center;
@@ -787,13 +727,7 @@
             color: #06b6d4;
         }
 
-        .qr-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 14px 0;
-        }
-
+        .qr-container { display: flex; flex-direction: column; align-items: center; margin: 14px 0; }
         .qr-img-box {
             background: white;
             padding: 8px;
@@ -805,13 +739,7 @@
             align-items: center;
             justify-content: center;
         }
-
-        .qr-img-box img {
-            width: 140px;
-            height: 140px;
-            object-fit: contain;
-            border-radius: 8px;
-        }
+        .qr-img-box img { width: 140px; height: 140px; object-fit: contain; border-radius: 8px; }
 
         .address-box {
             background: rgba(0,0,0,0.3);
@@ -864,55 +792,15 @@
             cursor: pointer;
         }
 
-        .txid-input-box {
-            margin-top: 14px;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
+        .txid-input-box { margin-top: 14px; display: flex; flex-direction: column; gap: 6px; }
+        .info-list { margin-top: 8px; display: flex; flex-direction: column; gap: 8px; }
+        .info-item { display: flex; gap: 8px; font-size: 0.72rem; color: var(--text-muted); line-height: 1.4; }
+        .info-item i { color: #06b6d4; margin-top: 2px; }
 
-        .info-list {
-            margin-top: 8px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .info-item {
-            display: flex;
-            gap: 8px;
-            font-size: 0.72rem;
-            color: var(--text-muted);
-            line-height: 1.4;
-        }
-
-        .info-item i {
-            color: #06b6d4;
-            margin-top: 2px;
-        }
-
-        /* TAB 3: WITHDRAW STYLING */
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            margin-top: 12px;
-        }
-
-        .form-label {
-            font-size: 0.7rem;
-            color: var(--text-sub);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .input-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
+        /* TAB 3: WITHDRAW */
+        .form-group { display: flex; flex-direction: column; gap: 6px; margin-top: 12px; }
+        .form-label { font-size: 0.7rem; color: var(--text-sub); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .input-wrapper { position: relative; display: flex; align-items: center; }
         .form-input {
             width: 100%;
             background: rgba(0,0,0,0.3);
@@ -923,10 +811,7 @@
             font-size: 0.9rem;
             outline: none;
         }
-
-        .form-input:focus {
-            border-color: var(--accent-purple);
-        }
+        .form-input:focus { border-color: var(--accent-purple); }
 
         .input-btn-inside {
             position: absolute;
@@ -951,19 +836,8 @@
             gap: 8px;
         }
 
-        .summary-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.75rem;
-            color: var(--text-muted);
-        }
-
-        .summary-row.total {
-            color: white;
-            font-weight: 700;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            padding-top: 6px;
-        }
+        .summary-row { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); }
+        .summary-row.total { color: white; font-weight: 700; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 6px; }
 
         .btn-withdraw-submit {
             width: 100%;
@@ -979,12 +853,8 @@
             box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
         }
 
-        /* TAB 4: INVITE STYLING */
-        .referral-hero {
-            text-align: center;
-            padding: 10px 0;
-        }
-
+        /* TAB 4: INVITE */
+        .referral-hero { text-align: center; padding: 10px 0; }
         .referral-icon-graphic {
             width: 70px;
             height: 70px;
@@ -1012,26 +882,12 @@
             text-align: center;
         }
 
-        .comm-level {
-            font-size: 0.65rem;
-            color: var(--text-sub);
-            font-weight: 700;
-        }
-
-        .comm-rate {
-            font-size: 1.1rem;
-            font-weight: 800;
-            margin: 4px 0;
-        }
-
+        .comm-level { font-size: 0.65rem; color: var(--text-sub); font-weight: 700; }
+        .comm-rate { font-size: 1.1rem; font-weight: 800; margin: 4px 0; }
         .comm-rate.l1 { color: #10b981; }
         .comm-rate.l2 { color: #a855f7; }
         .comm-rate.l3 { color: #f59e0b; }
-
-        .comm-meta {
-            font-size: 0.65rem;
-            color: var(--text-muted);
-        }
+        .comm-meta { font-size: 0.65rem; color: var(--text-muted); }
 
         .community-card {
             display: flex;
@@ -1041,7 +897,7 @@
             border: 1px solid rgba(59, 130, 246, 0.3);
         }
 
-        /* TAB 5: HISTORY STYLING */
+        /* TAB 5: HISTORY */
         .history-tabs {
             display: flex;
             background: rgba(0,0,0,0.3);
@@ -1061,18 +917,8 @@
             cursor: pointer;
         }
 
-        .sub-tab.active {
-            background: rgba(138, 92, 246, 0.3);
-            color: white;
-            font-weight: 700;
-        }
-
-        .history-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
+        .sub-tab.active { background: rgba(138, 92, 246, 0.3); color: white; font-weight: 700; }
+        .history-list { display: flex; flex-direction: column; gap: 8px; }
         .history-item {
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -1082,90 +928,89 @@
             align-items: center;
             justify-content: space-between;
         }
+        .history-left { display: flex; align-items: center; gap: 10px; }
+        .history-icon { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+        .history-title { font-size: 0.8rem; font-weight: 700; }
+        .history-date { font-size: 0.65rem; color: var(--text-sub); }
+        .history-amount { font-size: 0.85rem; font-weight: 700; text-align: right; }
 
-        .history-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .history-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-        }
-
-        .history-title {
-            font-size: 0.8rem;
-            font-weight: 700;
-        }
-
-        .history-date {
-            font-size: 0.65rem;
-            color: var(--text-sub);
-        }
-
-        .history-amount {
-            font-size: 0.85rem;
-            font-weight: 700;
-            text-align: right;
-        }
-
-        /* Bottom Navigation Bar */
+        /* ====================================================
+           CUSTOM 3D IMAGE FLOATING BOTTOM NAVIGATION
+           ==================================================== */
         .bottom-nav {
             position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 65px;
-            background: rgba(15, 10, 30, 0.95);
-            backdrop-filter: blur(12px);
-            border-top: 1px solid rgba(138, 92, 246, 0.15);
+            left: 10px;
+            right: 10px;
+            bottom: max(10px, env(safe-area-inset-bottom));
+            height: 74px;
+            padding: 4px 6px;
+            gap: 4px;
+            border: 1px solid rgba(170, 115, 226, 0.45);
+            border-radius: 26px;
+            background: linear-gradient(145deg, rgba(32, 18, 54, 0.95), rgba(16, 9, 31, 0.98));
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.08);
             display: flex;
             align-items: center;
             justify-content: space-around;
-            padding: 0 8px;
             z-index: 30;
         }
 
         .nav-item {
+            flex: 1;
+            height: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
-            color: var(--text-sub);
-            font-size: 0.65rem;
-            font-weight: 600;
+            justify-content: center;
+            gap: 2px;
             cursor: pointer;
-            width: 20%;
-            padding: 6px 0;
-            border-radius: 12px;
-            transition: all 0.2s;
+            padding: 3px 2px;
+            border-radius: 18px;
+            border: 1px solid transparent;
+            color: #b9accd;
+            font-size: 0.64rem;
+            font-weight: 700;
+            transition: all 0.22s ease-out;
         }
 
-        .nav-icon {
-            font-size: 16px;
-            width: 24px;
-            height: 24px;
+        .nav-img-box {
+            width: 38px;
+            height: 38px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s;
+            position: relative;
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .nav-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 10px;
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.45));
+            transition: filter 0.25s, transform 0.25s;
+        }
+
+        .nav-item:active {
+            transform: scale(0.92);
         }
 
         .nav-item.active {
-            color: white;
-            background: linear-gradient(180deg, rgba(138, 92, 246, 0.3) 0%, rgba(138, 92, 246, 0.05) 100%);
-            border: 1px solid rgba(138, 92, 246, 0.4);
+            color: #ffffff;
+            background: linear-gradient(155deg, rgba(143, 75, 196, 0.35), rgba(75, 37, 111, 0.2));
+            border-color: rgba(210, 165, 255, 0.5);
+            box-shadow: 0 0 16px rgba(168, 85, 247, 0.25), inset 0 1px 0 rgba(255,255,255,0.12);
         }
 
-        .nav-item.active .nav-icon {
-            color: #a855f7;
-            transform: translateY(-1px);
+        .nav-item.active .nav-img-box {
+            transform: translateY(-3px) scale(1.12);
+        }
+
+        .nav-item.active .nav-img-box img {
+            filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.85));
         }
 
         /* Toast Notifications */
@@ -1187,10 +1032,7 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
 
-        .toast.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
         /* TRADE RESULT MODAL */
         .result-overlay {
@@ -1283,22 +1125,9 @@
             margin: 4px 0 2px;
         }
 
-        .result-panel.loss .result-amount {
-            color: #fca5a5;
-        }
-
-        .result-subtitle {
-            font-size: 1rem;
-            font-weight: 700;
-            color: white;
-        }
-
-        .result-hook-text {
-            color: #b7b0ca;
-            font-size: .76rem;
-            line-height: 1.4;
-            margin: 8px 0 14px;
-        }
+        .result-panel.loss .result-amount { color: #fca5a5; }
+        .result-subtitle { font-size: 1rem; font-weight: 700; color: white; }
+        .result-hook-text { color: #b7b0ca; font-size: .76rem; line-height: 1.4; margin: 8px 0 14px; }
 
         .modal-comm-grid {
             display: grid;
@@ -1389,87 +1218,14 @@
             text-align: center;
         }
 
-        /* Hidden Sections */
-        .tab-section {
-            display: none;
-        }
+        .tab-section { display: none; }
+        .tab-section.active { display: flex; flex-direction: column; gap: 12px; }
 
-        .tab-section.active {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        /* Reference-inspired chart + floating bottom navigation (only requested areas) */
-        .chart-container {
-            height: clamp(245px, 42vh, 340px);
-            border-radius: 20px;
-            overflow: hidden;
-            margin: 10px 0 8px;
-            background:
-                radial-gradient(ellipse at 50% 0%, rgba(119, 43, 117, .30), transparent 65%),
-                linear-gradient(180deg, rgba(69, 27, 71, .78), rgba(24, 12, 35, .96));
-            border: 1px solid rgba(207, 91, 157, .24);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,.035), 0 8px 22px rgba(0,0,0,.18);
-        }
-        canvas#priceChart { display:block; width:100%; height:100%; }
-        .bottom-nav {
-            position: absolute;
-            left: 12px;
-            right: 12px;
-            bottom: max(8px, env(safe-area-inset-bottom));
-            height: 78px;
-            padding: 6px 7px;
-            gap: 2px;
-            border: 1px solid rgba(170, 115, 226, .58);
-            border-radius: 28px;
-            background: linear-gradient(145deg, rgba(39, 22, 63, .97), rgba(19, 11, 36, .98));
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            box-shadow: 0 -5px 22px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.08);
-        }
-        .nav-item {
-            width: 20%;
-            min-width: 0;
-            height: 100%;
-            padding: 7px 2px 5px;
-            gap: 3px;
-            border: 1px solid transparent;
-            border-radius: 21px;
-            color: #b9accd;
-            font-size: .68rem;
-            font-weight: 700;
-            justify-content: center;
-        }
-        .nav-icon {
-            width: 32px;
-            height: 32px;
-            font-size: 21px;
-            color: #a78bfa;
-            filter: drop-shadow(0 0 5px currentColor);
-            text-shadow: 0 0 8px currentColor;
-        }
-        .nav-item:nth-child(1) .nav-icon { color:#39f5b0; }
-        .nav-item:nth-child(2) .nav-icon { color:#42eacb; }
-        .nav-item:nth-child(3) .nav-icon { color:#ffd166; }
-        .nav-item:nth-child(4) .nav-icon { color:#b98aff; }
-        .nav-item:nth-child(5) .nav-icon { color:#a78bfa; }
-        .nav-item.active {
-            color: #fff;
-            border-color: rgba(210, 165, 255, .75);
-            background: linear-gradient(155deg, rgba(143, 75, 196, .82), rgba(75, 37, 111, .82));
-            box-shadow: 0 0 20px rgba(159, 83, 219, .28), inset 0 1px 0 rgba(255,255,255,.16);
-        }
-        .nav-item.active .nav-icon {
-            transform: translateY(-1px) scale(1.08);
-            filter: drop-shadow(0 0 7px currentColor);
-        }
-        .main-content { padding-bottom: 100px; }
         @media (max-height: 700px) {
-            .chart-container { height: 230px; }
-            .bottom-nav { height: 70px; }
+            .chart-container { height: 210px; }
+            .bottom-nav { height: 68px; }
+            .nav-img-box { width: 32px; height: 32px; }
         }
-
     </style>
 </head>
 <body>
@@ -1488,11 +1244,11 @@
         </button>
     </div>
 
-    <!-- 1. SPLASH SCREEN -->
+    <!-- 1. SPLASH SCREEN (Custom 3D Logo) -->
     <div id="splashScreen" class="splash-screen">
         <div class="splash-logo-wrapper">
             <div class="splash-logo-glow"></div>
-            <img src="logo.png" alt="TreaderBooom" class="splash-logo-img">
+            <img src="app_logo.png" alt="TreaderBooom" class="splash-logo-img" onerror="this.onerror=null; this.src='logo.png'">
         </div>
         <div class="splash-title">
             <span style="color:#fff;">Treader</span><span style="color:#10b981;">Booom</span>
@@ -1505,7 +1261,7 @@
     <!-- 2. TELEGRAM AUTHENTICATION OVERLAY -->
     <div id="authOverlay" class="auth-overlay">
         <div class="auth-card">
-            <img src="logo.png" alt="Logo" class="auth-logo">
+            <img src="app_logo.png" alt="Logo" class="auth-logo" onerror="this.onerror=null; this.src='logo.png'">
             <h2 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 6px;">Welcome to TreaderBooom</h2>
             <p style="color: var(--text-muted); font-size: 0.8rem; line-height: 1.5;">Connect with your Telegram account to start live crypto prediction and claim your welcome bonus.</p>
             <button class="btn-tg-auth" onclick="completeTelegramAuth()">
@@ -1706,7 +1462,7 @@
         <header class="app-header">
             <div class="brand">
                 <div class="brand-icon-wrapper">
-                    <img src="logo.png" alt="TB">
+                    <img src="app_logo.png" alt="TB" onerror="this.onerror=null; this.src='logo.png'">
                 </div>
                 <div><span>Treader</span><span class="highlight">Booom</span></div>
             </div>
@@ -1739,7 +1495,7 @@
                                 </div>
                             </div>
 
-                            <!-- Circular Countdown Timer (Left under Pair, no trade direction shown) -->
+                            <!-- Circular Countdown Timer -->
                             <div id="circularTimerBox" class="circular-timer-wrapper">
                                 <div class="circle-svg-box">
                                     <svg>
@@ -1758,7 +1514,7 @@
                         </div>
                     </div>
 
-                    <!-- Clean Chart Container without Baseline Tag or Indicators -->
+                    <!-- Clean Chart Container -->
                     <div class="chart-container">
                         <canvas id="priceChart"></canvas>
                     </div>
@@ -1770,7 +1526,7 @@
                     </div>
                 </div>
 
-                <!-- Stake Controls Card (Fixed Chips only, Custom Input Removed) -->
+                <!-- Stake Controls Card -->
                 <div class="card">
                     <div class="stake-header">
                         <span>STAKE AMOUNT</span>
@@ -1792,22 +1548,16 @@
                     </div>
                 </div>
 
-                <!-- Action Controls (Rise / Fall only, Cancel Button & Payout text removed) -->
+                <!-- NEW: 3D IMAGE TRADING BUTTONS (UP / RISE & DOWN / FALL) -->
                 <div>
-                    <div class="action-buttons">
-                        <button class="btn-predict btn-rise" onclick="startTrade('RISE')">
-                            <i class="fa-solid fa-arrow-trend-up" style="font-size: 20px;"></i>
-                            <div>
-                                RISE
-                                <span class="multiplier-badge">&times;1.8</span>
-                            </div>
+                    <div class="action-buttons-img-grid">
+                        <!-- RISE / UP BUTTON -->
+                        <button class="btn-img-trade btn-rise-img" onclick="startTrade('RISE')" aria-label="Trade Rise">
+                            <img src="btn_rise.png" alt="RISE UP">
                         </button>
-                        <button class="btn-predict btn-fall" onclick="startTrade('FALL')">
-                            <i class="fa-solid fa-arrow-trend-down" style="font-size: 20px;"></i>
-                            <div>
-                                FALL
-                                <span class="multiplier-badge">&times;1.8</span>
-                            </div>
+                        <!-- FALL / DOWN BUTTON -->
+                        <button class="btn-img-trade btn-fall-img" onclick="startTrade('FALL')" aria-label="Trade Fall">
+                            <img src="btn_fall.png" alt="FALL DOWN">
                         </button>
                     </div>
                 </div>
@@ -1821,9 +1571,7 @@
                         </div>
                         <span style="font-size: 0.65rem; color: var(--text-sub);">Recent Predictions</span>
                     </div>
-                    <div id="inPageHistoryList" class="my-history-list">
-                        <!-- Dynamically populated with predictions -->
-                    </div>
+                    <div id="inPageHistoryList" class="my-history-list"></div>
                 </div>
             </section>
 
@@ -1867,7 +1615,6 @@
                         <button class="btn-outline" onclick="window.open('https://bscscan.com/address/0x9e04F712817168066Efc0F5F53488F78Fa206B18', '_blank')">VIEW ON BSCSCAN</button>
                     </div>
 
-                    <!-- Transaction Hash (TxID) Submit Box -->
                     <div class="txid-input-box">
                         <label class="form-label">SUBMIT TRANSACTION HASH (TXID)</label>
                         <div class="input-wrapper">
@@ -1978,7 +1725,6 @@
                     </button>
                 </div>
 
-                <!-- NEW: GIFT CODE REDEEM SECTION (No demo codes shown) -->
                 <div class="card">
                     <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
                         <i class="fa-solid fa-gift" style="color: #10b981; font-size: 1.1rem;"></i>
@@ -2037,33 +1783,52 @@
                     <div class="sub-tab" onclick="switchHistoryTab('invitations', this)">Invitations</div>
                 </div>
 
-                <div id="historyContent" class="history-list">
-                    <!-- History Dynamic Content Population -->
-                </div>
+                <div id="historyContent" class="history-list"></div>
             </section>
 
         </main>
 
-        <!-- Bottom Navigation Bar -->
+        <!-- ====================================================
+             CUSTOM 3D IMAGE FLOATING BOTTOM NAVIGATION BAR
+             ==================================================== -->
         <nav class="bottom-nav">
+            <!-- 1. PREDICT -->
             <div class="nav-item active" onclick="switchTab('predict', this)">
-                <div class="nav-icon"><i class="fa-solid fa-chart-line"></i></div>
+                <div class="nav-img-box">
+                    <img src="nav_predict.png" alt="Predict">
+                </div>
                 <span>Predict</span>
             </div>
+
+            <!-- 2. DEPOSIT -->
             <div class="nav-item" onclick="switchTab('deposit', this)">
-                <div class="nav-icon"><i class="fa-solid fa-wallet"></i></div>
+                <div class="nav-img-box">
+                    <img src="nav_deposit.png" alt="Deposit">
+                </div>
                 <span>Deposit</span>
             </div>
+
+            <!-- 3. WITHDRAW -->
             <div class="nav-item" onclick="switchTab('withdraw', this)">
-                <div class="nav-icon"><i class="fa-solid fa-arrow-up-from-bracket"></i></div>
+                <div class="nav-img-box">
+                    <img src="nav_withdraw.png" alt="Withdraw">
+                </div>
                 <span>Withdraw</span>
             </div>
+
+            <!-- 4. INVITE / REFER -->
             <div class="nav-item" onclick="switchTab('invite', this)">
-                <div class="nav-icon"><i class="fa-solid fa-users"></i></div>
+                <div class="nav-img-box">
+                    <img src="nav_invite.png" alt="Invite">
+                </div>
                 <span>Invite</span>
             </div>
+
+            <!-- 5. HISTORY -->
             <div class="nav-item" onclick="switchTab('history', this)">
-                <div class="nav-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                <div class="nav-img-box">
+                    <img src="nav_history.png" alt="History">
+                </div>
                 <span>History</span>
             </div>
         </nav>
@@ -2071,12 +1836,8 @@
 
     <!-- Application Logic Script -->
     <script>
-        // ==========================================
-        // CONFIGURATION: Set your Telegram Bot Username
-        // ==========================================
         const BOT_USERNAME = "TreaderBooom_bot";
 
-        // Multi-Pair Definitions
         const CRYPTO_PAIRS = {
             'BTC/USDT': { name: 'Bitcoin', symbol: 'BTC', price: 80032.01, change: -0.05, icon: 'fa-bitcoin', bg: '#f7931a', isBrand: true },
             'ETH/USDT': { name: 'Ethereum', symbol: 'ETH', price: 2320.79, change: -0.09, icon: 'fa-ethereum', bg: '#627eea', isBrand: true },
@@ -2090,10 +1851,9 @@
         let tradeCountdown = null;
         let onlineStatsInterval = null;
 
-        // Application State
         let state = {
             balance: 0.00,
-            stake: 0.05, // Default stake updated to 0.05
+            stake: 0.05,
             currentPrice: CRYPTO_PAIRS['BTC/USDT'].price,
             baselinePrice: CRYPTO_PAIRS['BTC/USDT'].price,
             priceHistory: [],
@@ -2112,7 +1872,6 @@
             }
         };
 
-        // Telegram Only Environment Check
         function checkTelegramEnvironment() {
             const tg = window.Telegram?.WebApp;
             const isInsideTg = tg && (tg.initData || (tg.platform && tg.platform !== 'unknown'));
@@ -2127,7 +1886,6 @@
             window.location.href = `https://t.me/${BOT_USERNAME}`;
         }
 
-        // Each Telegram account gets its own isolated profile and welcome-bonus status.
         let userStorageKey = null;
 
         function loadStoredUserData() {
@@ -2143,7 +1901,6 @@
                     state.turnoverRequired = data.turnoverRequired ?? 0.00;
                     state.highestDeposit = data.highestDeposit ?? 0.00;
                     state.isBonusClaimed = !!data.isBonusClaimed;
-                    // The Telegram ID comes from the current Telegram session, never from saved/admin defaults.
                     state.userId = String(state.userId);
                     state.redeemedCodes = data.redeemedCodes || [];
                     if (data.history) state.history = data.history;
@@ -2174,18 +1931,13 @@
             }
         }
 
-        // ==========================================
-        // INITIALIZATION
-        // ==========================================
         window.addEventListener('DOMContentLoaded', () => {
-            // Verify Telegram mini app restriction
             checkTelegramEnvironment();
 
             const tg = window.Telegram?.WebApp;
             if (tg) {
                 tg.ready();
                 tg.expand();
-                // Telegram supplies a unique ID for the account currently opening this Mini App.
                 const telegramUserId = tg.initDataUnsafe?.user?.id;
                 if (telegramUserId !== undefined && telegramUserId !== null) {
                     state.userId = String(telegramUserId);
@@ -2196,12 +1948,10 @@
                 loadStoredUserData();
                 updateReferralLinkUI();
             } else {
-                // Never fall back to a hard-coded admin/user ID when Telegram identity is unavailable.
                 document.getElementById('tgGateOverlay').style.display = 'flex';
                 document.getElementById('authOverlay').classList.remove('show');
             }
 
-            // Populate stable price history
             state.priceHistory = [];
             for (let i = 0; i < 30; i++) {
                 state.priceHistory.push(state.currentPrice + (Math.random() - 0.49) * (state.currentPrice * 0.0004));
@@ -2229,7 +1979,6 @@
         }
 
         function completeTelegramAuth() {
-            // Do not create a shared profile or award a bonus without Telegram account identity.
             if (!state.userId || !window.Telegram?.WebApp?.initDataUnsafe?.user?.id) {
                 showToast('Please open this app from your Telegram account.');
                 return;
@@ -2261,9 +2010,6 @@
             document.getElementById('announceOverlay').classList.add('show');
         }
 
-        // ==========================================
-        // REAL-TIME CHART ENGINE (Bug Free & Dynamic Colors)
-        // ==========================================
         const canvas = document.getElementById('priceChart');
         const ctx = canvas.getContext('2d');
 
@@ -2275,9 +2021,7 @@
         }
         window.addEventListener('resize', resizeCanvas);
 
-        // Real-time market tick
         setInterval(() => {
-            // Slower, smoother chart movement.
             const volatility = state.currentPrice * 0.00012;
             const delta = (Math.random() - 0.495) * volatility;
             state.currentPrice += delta;
@@ -2299,7 +2043,6 @@
             ctx.clearRect(0, 0, w, h);
             if (!state.priceHistory || state.priceHistory.length < 2) return;
 
-            // Soft chart grid like the reference UI
             ctx.save();
             ctx.lineWidth = 1;
             ctx.strokeStyle = 'rgba(186, 151, 208, 0.075)';
@@ -2325,7 +2068,6 @@
                 x: index * stepX, y: yFor(val)
             }));
 
-            // Dashed reference / entry price
             const baseline = state.activeTrade ? state.activeTrade.entryPrice : state.baselinePrice;
             const baselineY = yFor(baseline);
             ctx.beginPath();
@@ -2345,7 +2087,6 @@
                 if (circleRing) circleRing.style.stroke = favorable ? '#10e6a0' : '#ff397f';
             }
 
-            // Filled area beneath the stepped price line
             ctx.beginPath();
             ctx.moveTo(points[0].x, points[0].y);
             for (let i = 1; i < points.length; i++) {
@@ -2361,7 +2102,6 @@
             area.addColorStop(1, 'rgba(44, 13, 43, .02)');
             ctx.fillStyle = area; ctx.fill();
 
-            // Neon stepped line with outer glow
             ctx.beginPath();
             ctx.moveTo(points[0].x, points[0].y);
             for (let i = 1; i < points.length; i++) {
@@ -2382,7 +2122,6 @@
             ctx.lineWidth = 1.25;
             ctx.stroke();
 
-            // White/pink glowing live endpoint
             const last = points[points.length - 1];
             ctx.beginPath(); ctx.arc(last.x, last.y, 12, 0, Math.PI * 2);
             ctx.fillStyle = 'rgba(255, 57, 127, .18)'; ctx.fill();
@@ -2392,9 +2131,6 @@
             ctx.restore();
         }
 
-        // ==========================================
-        // DYNAMIC COUNTERS
-        // ==========================================
         function startStatsFluctuation() {
             let onlineBase = 1258;
             let predBase = 564;
@@ -2411,16 +2147,8 @@
             }, 60000);
         }
 
-        // ==========================================
-        // CHANGE PAIR BOTTOM SHEET MODAL
-        // ==========================================
-        function openPairSheet() {
-            document.getElementById('pairBottomSheet').classList.add('show');
-        }
-
-        function closePairSheet() {
-            document.getElementById('pairBottomSheet').classList.remove('show');
-        }
+        function openPairSheet() { document.getElementById('pairBottomSheet').classList.add('show'); }
+        function closePairSheet() { document.getElementById('pairBottomSheet').classList.remove('show'); }
 
         function selectCryptoPair(pairKey) {
             if (!CRYPTO_PAIRS[pairKey]) return;
@@ -2446,9 +2174,6 @@
             showToast(`Switched pair to ${pairKey}`);
         }
 
-        // ==========================================
-        // STAKE & TRADING SYSTEM (Fixed Stakes, No Cancel)
-        // ==========================================
         function setStake(amount) {
             state.stake = parseFloat(amount);
             document.getElementById('stakeDisplay').innerText = state.stake.toFixed(2);
@@ -2474,7 +2199,6 @@
                 return;
             }
 
-            // Deduct stake
             state.balance -= state.stake;
             state.turnoverCompleted += state.stake;
             updateBalanceUI();
@@ -2490,14 +2214,13 @@
                 timer: duration
             };
 
-            // Show Compact Left Timer (No direction shown)
             const timerBox = document.getElementById('circularTimerBox');
             timerBox.style.display = 'flex';
 
-            showToast(`Order placed · ${state.stake.toFixed(2)} USDT`);
+            showToast(`Order placed (${direction}) · ${state.stake.toFixed(2)} USDT`);
 
             const circleRing = document.getElementById('circleProgressRing');
-            const circumference = 2 * Math.PI * 16; // r=16
+            const circumference = 2 * Math.PI * 16;
 
             tradeCountdown = setInterval(() => {
                 state.activeTrade.timer--;
@@ -2558,9 +2281,7 @@
             document.getElementById('resultOverlay').classList.add('show');
         }
 
-        function closeTradeResult() {
-            document.getElementById('resultOverlay').classList.remove('show');
-        }
+        function closeTradeResult() { document.getElementById('resultOverlay').classList.remove('show'); }
 
         function shareTradeResult() {
             const wonAmount = document.getElementById('resultAmount').innerText;
@@ -2578,9 +2299,6 @@
             }
         }
 
-        // ==========================================
-        // IN-PAGE MY HISTORY (Win = Green, Lose = Red)
-        // ==========================================
         function renderInPageHistory() {
             const container = document.getElementById('inPageHistoryList');
             const items = state.history.predictions.slice(0, 4);
@@ -2601,7 +2319,6 @@
                             <div style="font-size:0.62rem; color:var(--text-sub);">${item.date}</div>
                         </div>
                     </div>
-                    <!-- Win = Green (#10b981), Lose = Red (#ef4444) -->
                     <div style="font-size:0.78rem; font-weight:800; color:${item.status === 'success' ? '#10b981' : '#ef4444'};">
                         ${item.amount}
                     </div>
@@ -2609,9 +2326,6 @@
             `).join('');
         }
 
-        // ==========================================
-        // CLIPBOARD COPY
-        // ==========================================
         function copyTextToClipboard(text, successMessage) {
             if (!text) return;
             if (navigator.clipboard && window.isSecureContext) {
@@ -2655,9 +2369,6 @@
             copyTextToClipboard(link, "Referral link copied to clipboard!");
         }
 
-        // ==========================================
-        // GIFT CODE REDEEM LOGIC (No Demo Codes)
-        // ==========================================
         function redeemGiftCode() {
             const code = document.getElementById('giftCodeInput').value.trim().toUpperCase();
             if (!code) {
@@ -2671,7 +2382,6 @@
                 return;
             }
 
-            // Real promo codes configured for your users
             const VALID_GIFT_CODES = {
                 "BOOOM10": 10.00,
                 "VIPUSDT": 5.00,
@@ -2736,9 +2446,6 @@
             showToast(`Deposit submitted & credited: +${amount.toFixed(2)} USDT`);
         }
 
-        // ==========================================
-        // WITHDRAWAL VALIDATION
-        // ==========================================
         function calculateWithdrawal() {
             const amount = parseFloat(document.getElementById('withdrawAmount').value) || 0;
             const receive = Math.max(0, amount - 0.30);
@@ -2802,9 +2509,6 @@
             calculateWithdrawal();
         }
 
-        // ==========================================
-        // TAB & NAVIGATION CONTROLLER
-        // ==========================================
         function switchTab(tabId, el) {
             document.querySelectorAll('.tab-section').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
@@ -2814,7 +2518,8 @@
             if (el) {
                 el.classList.add('active');
             } else {
-                const navIndex = ['predict', 'deposit', 'withdraw', 'invite', 'history'].indexOf(tabId);
+                const tabNames = ['predict', 'deposit', 'withdraw', 'invite', 'history'];
+                const navIndex = tabNames.indexOf(tabId);
                 if (navIndex >= 0) document.querySelectorAll('.nav-item')[navIndex].classList.add('active');
             }
 
@@ -2830,9 +2535,6 @@
             }
         }
 
-        // ==========================================
-        // DYNAMIC HISTORY TAB RENDERING
-        // ==========================================
         function switchHistoryTab(type, el) {
             document.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
             el.classList.add('active');
