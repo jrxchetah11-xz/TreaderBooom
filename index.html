@@ -736,6 +736,18 @@
             overflow: visible;
         }
 
+        .btn-img-trade {
+            min-height: 58px; padding: 14px 8px; color: #fff; font-size: 1rem; font-weight: 800; letter-spacing: .5px; border: 0;
+        }
+        .btn-rise-img { background: linear-gradient(135deg,#10b981,#047857); box-shadow: 0 4px 14px rgba(16,185,129,.25); }
+        .btn-fall-img { background: linear-gradient(135deg,#ef4444,#b91c1c); box-shadow: 0 4px 14px rgba(239,68,68,.25); }
+        .wallet-switch { display:flex; gap:8px; margin-bottom:12px; }
+        .wallet-switch button { flex:1; padding:11px; border:1px solid var(--bg-card-border); border-radius:12px; color:#fff; background:#21183a; font-weight:800; }
+        .wallet-switch button.active { background:linear-gradient(135deg,#8b5cf6,#5b21b6); }
+        .wallet-history { margin-top:14px; }
+        .wallet-pane { display:none; } .wallet-pane.active { display:block; }
+        .trade-time-row { display:flex; align-items:center; justify-content:space-between; margin-top:10px; color:var(--text-muted); font-size:.75rem; }
+        .trade-time-row select { background:#21183a;color:#fff;border:1px solid var(--bg-card-border);padding:7px;border-radius:8px; }
         .btn-img-trade img {
             width: 100%;
             height: auto;
@@ -1372,7 +1384,7 @@
     <!-- TELEGRAM ONLY BLOCKER OVERLAY -->
     <div id="tgGateOverlay" class="tg-only-overlay">
         <div style="width: 75px; height: 75px; border-radius: 50%; background: linear-gradient(135deg, #229ed9, #0088cc); display: flex; align-items: center; justify-content: center; font-size: 38px; color: white; margin-bottom: 20px; box-shadow: 0 0 35px rgba(34,158,217,0.6);">
-            <i class="fa-brands fa-telegram"></i>
+            <img src="telegram_icon.png" alt="Telegram" style="width:22px;height:22px;object-fit:contain;">
         </div>
         <h2 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 8px;">Telegram Mini App Required</h2>
         <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.6; max-width: 320px; margin-bottom: 24px;">
@@ -1610,7 +1622,7 @@
             </div>
             <div class="header-actions">
                 <div class="balance-badge">
-                    <div class="usdt-icon"><i class="fa-solid fa-t"></i></div>
+                    <img src="usdt_icon.png" alt="USDT" style="width:24px;height:24px;object-fit:contain;">
                     <span id="userBalance">0.00</span> USDT
                     <button class="add-balance-btn" onclick="switchTab('deposit')">+</button>
                 </div>
@@ -1692,7 +1704,7 @@
                     </div>
 
                     <div class="stake-input-container">
-                        <div class="usdt-icon" style="width: 22px; height: 22px;"><i class="fa-solid fa-t"></i></div>
+                        <img src="usdt_icon.png" alt="USDT" style="width:24px;height:24px;object-fit:contain;">
                         <div id="stakeDisplay" class="stake-amount-display">0.05</div>
                         <span style="font-weight: 800; font-size: 0.85rem; color: var(--text-muted);">USDT</span>
                     </div>
@@ -1706,15 +1718,13 @@
                     </div>
                 </div>
 
-                <!-- 3D IMAGE TRADING BUTTONS (UP / RISE & DOWN / FALL) -->
+                <div class="trade-time-row"><label for="tradeDurationSelect">TRADE TIME</label><select id="tradeDurationSelect"><option value="30">30 Seconds</option><option value="60" selected>60 Seconds</option><option value="90">90 Seconds</option><option value="120">120 Seconds</option></select></div>
+
+                <!-- TEXT-ONLY TRADING BUTTONS -->
                 <div>
                     <div class="action-buttons-img-grid">
-                        <button class="btn-img-trade btn-rise-img" onclick="startTrade('RISE')" aria-label="Trade Rise">
-                            <img src="btn_rise.png" alt="RISE UP">
-                        </button>
-                        <button class="btn-img-trade btn-fall-img" onclick="startTrade('FALL')" aria-label="Trade Fall">
-                            <img src="btn_fall.png" alt="FALL DOWN">
-                        </button>
+                        <button class="btn-img-trade btn-rise-img" onclick="startTrade('RISE')" aria-label="Trade Rise">RISE</button>
+                        <button class="btn-img-trade btn-fall-img" onclick="startTrade('FALL')" aria-label="Trade Fall">FALL</button>
                     </div>
                 </div>
 
@@ -1733,6 +1743,8 @@
 
             <!-- TAB 2: DEPOSIT -->
             <section id="tab-deposit" class="tab-section">
+                <div class="wallet-switch"><button class="active" onclick="switchWalletPane('deposit',this)">DEPOSIT</button><button onclick="switchWalletPane('withdraw',this)">WITHDRAW</button></div>
+                <div id="walletDepositPane" class="wallet-pane active">
                 <div class="deposit-banner">
                     <!-- CHANGED: nav_deposit.png ICON -->
                     <div class="deposit-icon-wrapper">
@@ -1740,14 +1752,14 @@
                     </div>
                     <div>
                         <h3 style="font-size: 0.95rem; font-weight: 800;">Deposit USDT</h3>
-                        <p style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">Your personal BEP20 address on BNB Smart Chain. Credited automatically.</p>
+                        <p style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">Your personal BEP20 address on BNB Smart Chain. Balance updates after Admin approval.</p>
                     </div>
                 </div>
 
                 <div class="card">
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <div style="display: flex; align-items: center; gap: 8px;">
-                            <div class="usdt-icon" style="width: 24px; height: 24px;"><i class="fa-solid fa-t"></i></div>
+                            <img src="usdt_icon.png" alt="USDT" style="width:24px;height:24px;object-fit:contain;">
                             <div>
                                 <strong style="font-size: 0.85rem; display: block;">USDT</strong>
                                 <span style="font-size: 0.65rem; color: var(--text-sub);">BNB Smart Chain (BEP20)</span>
@@ -1795,14 +1807,16 @@
                         </div>
                         <div class="info-item">
                             <i class="fa-solid fa-circle-info"></i>
-                            <div>The minimum deposit is <strong>1.00 USDT</strong>. Paste your TxID above after the transfer to verify instantly.</div>
+                            <div>The minimum deposit is <strong>1.00 USDT</strong>. Submit your TxID above. Your balance updates only after Admin approval.</div>
                         </div>
                     </div>
+                </div>
+                <div class="card wallet-history"><h4 style="margin-bottom:10px;">DEPOSIT HISTORY</h4><div id="depositHistoryInline" class="history-list"></div></div>
                 </div>
             </section>
 
             <!-- TAB 3: WITHDRAW -->
-            <section id="tab-withdraw" class="tab-section">
+            <section id="tab-withdraw" class="tab-section" style="display:none">
                 <div class="deposit-banner">
                     <!-- CHANGED: nav_withdraw.png ICON -->
                     <div class="deposit-icon-wrapper" style="background: rgba(245, 158, 11, 0.2);">
@@ -1818,7 +1832,7 @@
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <span class="form-label">AVAILABLE BALANCE</span>
                         <div style="display: flex; align-items: center; gap: 6px; font-weight: 800;">
-                            <div class="usdt-icon"><i class="fa-solid fa-t"></i></div>
+                            <img src="usdt_icon.png" alt="USDT" style="width:24px;height:24px;object-fit:contain;">
                             <span id="withdrawAvailable">0.00</span> USDT
                         </div>
                     </div>
@@ -1858,8 +1872,9 @@
                 </div>
 
                 <div style="font-size: 0.7rem; color: var(--text-sub); text-align: center; line-height: 1.4;">
-                    Withdrawals are processed automatically on BNB Smart Chain within 1-5 minutes.
+                    Withdrawals are sent after request review and approval.
                 </div>
+                <div class="card wallet-history"><h4 style="margin-bottom:10px;">WITHDRAW HISTORY</h4><div id="withdrawHistoryInline" class="history-list"></div></div>
             </section>
 
             <!-- TAB 4: INVITE -->
@@ -1884,25 +1899,10 @@
                     </button>
                 </div>
 
-                <div class="card">
-                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
-                        <i class="fa-solid fa-gift" style="color: #10b981; font-size: 1.1rem;"></i>
-                        <strong style="font-size: 0.85rem;">Redeem Gift Code</strong>
-                    </div>
-                    <div class="form-group" style="margin-top:0;">
-                        <div class="input-wrapper">
-                            <input type="text" id="giftCodeInput" class="form-input" placeholder="Enter Gift Code" style="text-transform: uppercase;">
-                        </div>
-                    </div>
-                    <button class="btn-cyan" style="width: 100%; margin-top: 10px; background: linear-gradient(135deg, #10b981, #059669);" onclick="redeemGiftCode()">
-                        REDEEM GIFT CODE
-                    </button>
-                </div>
-
                 <div class="card community-card">
                     <div style="display: flex; align-items: center; gap: 10px;">
                         <div style="width: 36px; height: 36px; background: #229ed9; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; color: white;">
-                            <i class="fa-brands fa-telegram"></i>
+                            <img src="telegram_icon.png" alt="Telegram" style="width:22px;height:22px;object-fit:contain;">
                         </div>
                         <div>
                             <strong style="font-size: 0.8rem; display: block;">TreaderBooom Community</strong>
@@ -1911,6 +1911,8 @@
                     </div>
                     <button class="btn-cyan" style="padding: 6px 12px; font-size: 0.7rem;" onclick="window.open('https://t.me/TreaderBoom', '_blank')">Join Now</button>
                 </div>
+
+                <div class="card wallet-history"><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;"><img src="nav_invite.png" alt="Invite" style="width:24px;height:24px;object-fit:contain"><strong>INVITE HISTORY</strong></div><div id="inviteHistoryInline" class="history-list"></div></div>
 
                 <div class="commission-grid">
                     <div class="comm-card">
@@ -1934,10 +1936,23 @@
                 </div>
             </section>
 
+            <!-- TAB: GIFT CODE -->
+            <section id="tab-gift" class="tab-section">
+                <div class="card">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+                        <img src="nav_gift.png" alt="Gift Code" style="width:28px;height:28px;object-fit:contain;">
+                        <strong style="font-size:0.95rem;">Redeem Gift Code</strong>
+                    </div>
+                    <div class="form-group" style="margin-top:0;"><div class="input-wrapper"><input type="text" id="giftCodeInput" class="form-input" placeholder="Enter Gift Code" style="text-transform:uppercase;"></div></div>
+                    <button class="btn-cyan" style="width:100%;margin-top:10px;background:linear-gradient(135deg,#10b981,#059669);" onclick="redeemGiftCode()">REDEEM GIFT CODE</button>
+                </div>
+            </section>
+
             <!-- TAB 5: HISTORY -->
             <section id="tab-history" class="tab-section">
                 <div class="history-tabs">
                     <div class="sub-tab active" onclick="switchHistoryTab('deposits', this)">Deposits</div>
+                    <div class="sub-tab" onclick="switchHistoryTab('withdrawals', this)">Withdrawals</div>
                     <div class="sub-tab" onclick="switchHistoryTab('predictions', this)">Predictions</div>
                     <div class="sub-tab" onclick="switchHistoryTab('invitations', this)">Invitations</div>
                 </div>
@@ -1949,45 +1964,11 @@
 
         <!-- FLOATING BOTTOM NAVIGATION BAR -->
         <nav class="bottom-nav">
-            <!-- 1. PREDICT -->
-            <div class="nav-item active" onclick="switchTab('predict', this)">
-                <div class="nav-img-box">
-                    <img src="nav_predict.png" alt="Predict">
-                </div>
-                <span>Predict</span>
-            </div>
-
-            <!-- 2. DEPOSIT -->
-            <div class="nav-item" onclick="switchTab('deposit', this)">
-                <div class="nav-img-box">
-                    <img src="nav_deposit.png" alt="Deposit">
-                </div>
-                <span>Deposit</span>
-            </div>
-
-            <!-- 3. WITHDRAW -->
-            <div class="nav-item" onclick="switchTab('withdraw', this)">
-                <div class="nav-img-box">
-                    <img src="nav_withdraw.png" alt="Withdraw">
-                </div>
-                <span>Withdraw</span>
-            </div>
-
-            <!-- 4. INVITE -->
-            <div class="nav-item" onclick="switchTab('invite', this)">
-                <div class="nav-img-box">
-                    <img src="nav_invite.png" alt="Invite">
-                </div>
-                <span>Invite</span>
-            </div>
-
-            <!-- 5. HISTORY -->
-            <div class="nav-item" onclick="switchTab('history', this)">
-                <div class="nav-img-box">
-                    <img src="nav_history.png" alt="History">
-                </div>
-                <span>History</span>
-            </div>
+            <div class="nav-item active" onclick="switchTab('predict', this)"><div class="nav-img-box"><img src="nav_predict.png" alt="Predict"></div><span>Predict</span></div>
+            <div class="nav-item" onclick="switchTab('deposit', this)"><div class="nav-img-box"><img src="nav_wallet.png" alt="Wallet"></div><span>Wallet</span></div>
+            <div class="nav-item" onclick="switchTab('invite', this)"><div class="nav-img-box"><img src="nav_invite.png" alt="Invite"></div><span>Reffer</span></div>
+            <div class="nav-item" onclick="switchTab('history', this)"><div class="nav-img-box"><img src="nav_history.png" alt="History"></div><span>History</span></div>
+            <div class="nav-item" onclick="switchTab('gift', this)"><div class="nav-img-box"><img src="nav_gift.png" alt="Gift Code"></div><span>Gift Code</span></div>
         </nav>
     </div>
 
@@ -2025,8 +2006,11 @@
             history: {
                 deposits: [],
                 predictions: [],
-                invitations: []
-            }
+                invitations: [],
+                withdrawals: [],
+                depositRequests: []
+            },
+            usedTxIds: []
         };
 
         /* LIVE TICKER POPULATOR */
@@ -2086,7 +2070,8 @@
                     state.isBonusClaimed = !!data.isBonusClaimed;
                     state.userId = String(state.userId);
                     state.redeemedCodes = data.redeemedCodes || [];
-                    if (data.history) state.history = data.history;
+                    if (data.history) state.history = { deposits: [], predictions: [], invitations: [], withdrawals: [], depositRequests: [], ...data.history };
+                    state.usedTxIds = data.usedTxIds || [];
                 }
             } catch (e) {
                 console.error("Storage loading error:", e);
@@ -2106,7 +2091,8 @@
                     isBonusClaimed: state.isBonusClaimed,
                     userId: state.userId,
                     redeemedCodes: state.redeemedCodes,
-                    history: state.history
+                    history: state.history,
+                    usedTxIds: state.usedTxIds
                 };
                 localStorage.setItem(userStorageKey, JSON.stringify(dataToSave));
             } catch (e) {
@@ -2117,6 +2103,7 @@
         window.addEventListener('DOMContentLoaded', () => {
             checkTelegramEnvironment();
             initLiveTicker();
+            renderInlineHistories();
 
             const tg = window.Telegram?.WebApp;
             if (tg) {
@@ -2388,7 +2375,7 @@
             updateBalanceUI();
             saveUserData();
 
-            const duration = 60;
+            const duration = parseInt(document.getElementById('tradeDurationSelect')?.value || '60', 10);
             state.activeTrade = {
                 pair: currentPairKey,
                 direction: direction,
@@ -2611,39 +2598,20 @@
         }
 
         function submitDepositTxId() {
-            const txId = document.getElementById('txIdInput').value.trim();
+            const txId = document.getElementById('txIdInput').value.trim().toLowerCase();
             const amount = parseFloat(document.getElementById('txAmountInput').value) || 0;
-
-            if (!txId || txId.length < 10) {
-                showToast("Please enter a valid Transaction Hash (TxID)");
-                return;
-            }
-            if (amount < 1.0) {
-                showToast("Minimum deposit amount is 1.00 USDT");
-                return;
-            }
-
-            state.isAccountActive = true;
-
-            if (amount > 4.00) {
-                state.turnoverRequired = 7.00;
-                if (amount > state.highestDeposit) state.highestDeposit = amount;
-            }
-
-            state.balance += amount;
-            state.history.deposits.unshift({
-                title: "USDT Deposit (BEP20)",
-                date: new Date().toLocaleDateString(),
-                amount: `+${amount.toFixed(2)} USDT`,
-                status: "success"
-            });
-
+            if (!txId || txId.length < 10) { showToast("Please enter a valid Transaction Hash (TxID)"); return; }
+            if (amount < 1.0) { showToast("Minimum deposit amount is 1.00 USDT"); return; }
+            if (!state.usedTxIds) state.usedTxIds = [];
+            if (state.usedTxIds.includes(txId)) { showToast("This TxID has already been submitted"); return; }
+            state.usedTxIds.push(txId);
+            const request = { title: "USDT Deposit (BEP20)", txId, date: new Date().toLocaleString(), amount: `+${amount.toFixed(2)} USDT`, numericAmount: amount, status: "pending" };
+            state.history.depositRequests.unshift(request);
+            state.history.deposits.unshift(request);
             document.getElementById('txIdInput').value = "";
             document.getElementById('txAmountInput').value = "";
-
-            updateBalanceUI();
-            saveUserData();
-            showToast(`Deposit submitted & credited: +${amount.toFixed(2)} USDT`);
+            saveUserData(); renderInlineHistories();
+            showToast("Deposit request submitted. Balance will update after Admin approval.");
         }
 
         function calculateWithdrawal() {
@@ -2694,17 +2662,18 @@
                 return;
             }
 
-            state.balance -= amount;
-            updateBalanceUI();
-            state.history.deposits.unshift({
+            state.history.withdrawals.unshift({
                 title: "USDT Withdrawal",
-                date: new Date().toLocaleDateString(),
+                date: new Date().toLocaleString(),
                 amount: `-${amount.toFixed(2)} USDT`,
-                status: "success"
+                numericAmount: amount,
+                address: addr,
+                status: "pending"
             });
             saveUserData();
 
-            showToast("Withdrawal request submitted successfully.");
+            renderInlineHistories();
+            showToast("Withdrawal request submitted. Balance is unchanged until Admin approval.");
             document.getElementById('withdrawAmount').value = "";
             calculateWithdrawal();
         }
@@ -2718,7 +2687,7 @@
             if (el) {
                 el.classList.add('active');
             } else {
-                const tabNames = ['predict', 'deposit', 'withdraw', 'invite', 'history'];
+                const tabNames = ['predict', 'deposit', 'invite', 'history', 'gift'];
                 const navIndex = tabNames.indexOf(tabId);
                 if (navIndex >= 0) document.querySelectorAll('.nav-item')[navIndex].classList.add('active');
             }
@@ -2730,9 +2699,35 @@
                 }, 50);
             }
 
-            if (tabId === 'history') {
-                renderHistory('deposits');
-            }
+            if (tabId === 'history') { renderHistory('deposits'); }
+            if (tabId === 'deposit') { switchWalletPane('deposit'); }
+            if (tabId === 'withdraw') { switchWalletPane('withdraw'); }
+        }
+
+
+        function switchWalletPane(which, button) {
+            const dep = document.getElementById('tab-deposit');
+            const wit = document.getElementById('tab-withdraw');
+            const activeNav = document.querySelectorAll('.nav-item')[1];
+            document.querySelectorAll('.tab-section').forEach(sec => sec.classList.remove('active'));
+            dep.classList.toggle('active', which === 'deposit');
+            wit.classList.toggle('active', which === 'withdraw');
+            wit.style.display = which === 'withdraw' ? 'block' : 'none';
+            dep.style.display = which === 'deposit' ? 'block' : 'none';
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            activeNav.classList.add('active');
+            renderInlineHistories();
+        }
+
+        function renderInlineHistories() {
+            const render = (items, target, isWithdraw=false) => {
+                const el = document.getElementById(target); if (!el) return;
+                const rows = (items || []).slice(0,30);
+                el.innerHTML = rows.length ? rows.map(item => `<div class="history-item"><div class="history-left"><img src="${isWithdraw ? 'nav_withdraw.png' : 'usdt_icon.png'}" style="width:28px;height:28px;object-fit:contain" alt=""><div><div class="history-title">${item.title}</div><div class="history-date">${item.date} · ${item.status || 'pending'}</div></div></div><div class="history-amount" style="color:${isWithdraw ? '#ef4444' : '#10b981'}">${item.amount}</div></div>`).join('') : '<div style="text-align:center;color:var(--text-sub);padding:16px">No records found</div>';
+            };
+            render(state.history.deposits, 'depositHistoryInline');
+            render(state.history.withdrawals, 'withdrawHistoryInline', true);
+            render(state.history.invitations, 'inviteHistoryInline');
         }
 
         function switchHistoryTab(type, el) {
@@ -2752,26 +2747,22 @@
 
             container.innerHTML = data.map(item => {
                 let iconClass = 'fa-solid fa-arrow-down';
+                let historyLogo = type === 'invitations' ? 'nav_invite.png' : (type === 'withdrawals' ? 'nav_withdraw.png' : 'usdt_icon.png');
                 if (type === 'predictions') {
                     iconClass = item.status === 'success' ? 'fa-solid fa-arrow-trend-up' : 'fa-solid fa-arrow-trend-down';
-                } else if (type === 'invitations') {
-                    iconClass = 'fa-solid fa-user-plus';
-                } else if (type === 'deposits' && item.title.includes('Withdrawal')) {
-                    iconClass = 'fa-solid fa-arrow-up';
-                }
+                    if (item.status !== 'success') historyLogo = 'his_down.png';
+                } else if (type === 'invitations') { iconClass = 'fa-solid fa-user-plus'; }
 
                 return `
                     <div class="history-item">
                         <div class="history-left">
-                            <div class="history-icon" style="background: ${item.status === 'success' ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.15)'}; color: ${item.status === 'success' ? '#10b981' : '#ef4444'};">
-                                <i class="${iconClass}"></i>
-                            </div>
+                            <div class="history-icon" style="background: rgba(16,185,129,0.10);"><img src="${historyLogo}" style="width:26px;height:26px;object-fit:contain" alt=""></div>
                             <div>
                                 <div class="history-title">${item.title}</div>
                                 <div class="history-date">${item.date}</div>
                             </div>
                         </div>
-                        <div class="history-amount" style="color: ${item.status === 'success' ? '#10b981' : '#ef4444'};">
+                        <div class="history-amount" style="color: ${type === 'withdrawals' || String(item.amount).startsWith('-') ? '#ef4444' : '#10b981'};">
                             ${item.amount}
                         </div>
                     </div>
