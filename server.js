@@ -14,9 +14,13 @@ const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '';
 const ADMIN_IDS = new Set((process.env.ADMIN_TELEGRAM_IDS || '').split(',').map(x => x.trim()).filter(Boolean));
 const DATA_DIR = path.join(__dirname, 'data');
 fs.mkdirSync(DATA_DIR, { recursive: true });
+
 const CONFIG_FILE = path.join(DATA_DIR, 'config.json');
 const USERS_FILE = path.join(DATA_DIR, 'users.json');
 const EVENTS_FILE = path.join(DATA_DIR, 'events.json');
+const DEPOSITS_FILE = path.join(DATA_DIR, 'deposits.json');
+const WITHDRAWALS_FILE = path.join(DATA_DIR, 'withdrawals.json');
+const GIFTCODES_FILE = path.join(DATA_DIR, 'giftcodes.json');
 
 const defaults = {
   appName: 'TreaderBooom',
@@ -33,16 +37,25 @@ const defaults = {
   resultLossMessage: 'TRADE LOST — your demo trade did not go your way.',
   resultCancelMessage: 'TRADE CANCELLED — your demo stake was returned.'
 };
+
 function readJson(file, fallback) {
   try { return JSON.parse(fs.readFileSync(file, 'utf8')); } catch { return fallback; }
 }
 function writeJson(file, value) { fs.writeFileSync(file, JSON.stringify(value, null, 2)); }
+
 let config = { ...defaults, ...readJson(CONFIG_FILE, {}) };
 let users = readJson(USERS_FILE, {});
 let events = readJson(EVENTS_FILE, []);
+let deposits = readJson(DEPOSITS_FILE, []);
+let withdrawals = readJson(WITHDRAWALS_FILE, []);
+let giftCodes = readJson(GIFTCODES_FILE, []);
+
 function saveConfig() { writeJson(CONFIG_FILE, config); }
 function saveUsers() { writeJson(USERS_FILE, users); }
 function saveEvents() { writeJson(EVENTS_FILE, events.slice(-5000)); }
+function saveDeposits() { writeJson(DEPOSITS_FILE, deposits); }
+function saveWithdrawals() { writeJson(WITHDRAWALS_FILE, withdrawals); }
+function saveGiftCodes() { writeJson(GIFTCODES_FILE, giftCodes); }
 
 function verifyTelegramInitData(initData) {
   if (!BOT_TOKEN || !initData || typeof initData !== 'string') return null;
@@ -65,40 +78,80 @@ function verifyTelegramInitData(initData) {
     return user;
   } catch { return null; }
 }
+
 function sessionMiddleware(req, res, next) {
   const user = verifyTelegramInitData(req.body?.initData || req.headers['x-telegram-init-data']);
   if (!user) return res.status(401).json({ error: 'Valid Telegram Mini App session required.' });
   req.telegramUser = user;
   next();
 }
+
 app.get('/api/health', (_req, res) => res.json({ ok: true, app: config.appName }));
 app.get('/api/config', (_req, res) => {
   const { appName, tradingEnabled, tradeDuration, multiplier, cancelEnabled, minStake, maxStakePercent, maintenanceMessage, supportUrl } = config;
   res.json({ appName, tradingEnabled, tradeDuration, multiplier, cancelEnabled, minStake, maxStakePercent, maintenanceMessage, supportUrl });
 });
+
 app.post('/api/session', sessionMiddleware, (req, res) => {
   const u = req.telegramUser;
   const id = String(u.id);
-  users[id] = { id: u.id, firstName: u.first_name || '', username: u.username || '', lastSeen: new Date().toISOString(), blocked: users[id]?.blocked || false };
+  if (!users[id]) {
+    users[id] = { id: u.id, firstName: u.first_name || '', username: u.username || '', balance: 0, blocked: false, createdAt: new Date().toISOString() };
+  }
+  users[id].lastSeen = new Date().toISOString();
   saveUsers();
   if (users[id].blocked) return res.status(403).json({ error: 'This account is blocked.' });
-  res.json({ user: { id: u.id, first_name: u.first_name || '', username: u.username || '' }, config: { appName: config.appName } });
+  res.json({ user: { id: u.id, first_name: u.first_name || '', username: u.username || '', balance: users[id].balance }, config: { appName: config.appName } });
 });
-app.post('/api/events', sessionMiddleware, (req, res) => {
+
+// Deposit Submit Endpoint -> Goes to Admin Pending Queue
+app.post('/api/deposit/submit', sessionMiddleware, (req, res) => {
   const id = String(req.telegramUser.id);
   if (users[id]?.blocked) return res.status(403).json({ error: 'Account blocked.' });
-  const type = String(req.body?.type || 'unknown').slice(0, 60);
-  const details = req.body?.details && typeof req.body.details === 'object' ? req.body.details : {};
-  events.push({ id, type, details, at: new Date().toISOString() });
-  saveEvents();
-  res.json({ ok: true });
+  const { amount, txid } = req.body;
+  if (!amount || !txid) return res.status(400).json({ error: 'Amount and TxID are required.' });
+
+  const depositItem = {
+    id: 'dep_' + Date.now(),
+    userId: id,
+    userName: users[id]?.firstName || 'User',
+    amount: Number(amount),
+    txid: String(txid),
+    status: 'pending',
+    at: new Date().toISOString()
+  };
+  deposits.push(depositItem);
+  saveDeposits();
+
+  // Notify Admins via Telegram Bot if available
+  if (bot) {
+    for (const adminId of ADMIN_IDS) {
+      bot.telegram.sendMessage(adminId, 
+        `🔔 **New Deposit Request!**\n\nUser: ${depositItem.userName} (ID: \`${id}\`)\nAmount: ${depositItem.amount} USDT\nTxID: \`${depositItem.txid}\``,
+        Markup.inlineKeyboard([
+          [Markup.button.callback(`✅ Approve`, `approve_dep_${depositItem.id}`), Markup.button.callback(`❌ Reject`, `reject_dep_${depositItem.id}`)]
+        ])
+      ).catch(() => {});
+    }
+  }
+
+  res.json({ ok: true, message: 'Deposit request submitted successfully to admin.' });
+});
+
+// Get User History Endpoints
+app.get('/api/history', sessionMiddleware, (req, res) => {
+  const id = String(req.telegramUser.id);
+  res.json({
+    deposits: deposits.filter(d => d.userId === id),
+    withdrawals: withdrawals.filter(w => w.userId === id)
+  });
 });
 
 let bot;
 if (BOT_TOKEN) {
   bot = new Telegraf(BOT_TOKEN);
   const isAdmin = ctx => ADMIN_IDS.has(String(ctx.from?.id || ''));
-  // Protect callback buttons too, including forwarded/copied admin messages.
+
   bot.use(async (ctx, next) => {
     if (ctx.callbackQuery && !isAdmin(ctx)) {
       try { await ctx.answerCbQuery('Access denied.'); } catch {}
@@ -106,16 +159,19 @@ if (BOT_TOKEN) {
     }
     return next();
   });
+
   const adminOnly = async (ctx, next) => {
     if (!isAdmin(ctx)) { await ctx.reply('Access denied. This bot is restricted to configured administrators.'); return; }
     return next();
   };
+
   const mainKeyboard = () => Markup.inlineKeyboard([
     [Markup.button.callback('Dashboard', 'dashboard'), Markup.button.callback('App controls', 'controls')],
-    [Markup.button.callback('Trade settings', 'trade_settings'), Markup.button.callback('Messages', 'messages')],
-    [Markup.button.callback('Users', 'users'), Markup.button.callback('Recent events', 'events')],
+    [Markup.button.callback('Pending Deposits', 'pending_deposits'), Markup.button.callback('Withdrawals', 'withdrawals_list')],
+    [Markup.button.callback('User Management', 'users_mgmt'), Markup.button.callback('Gift Codes', 'gift_codes_menu')],
     [Markup.button.callback('Broadcast', 'broadcast_help'), Markup.button.callback('Help', 'help')]
   ]);
+
   bot.start(async ctx => {
     if (!isAdmin(ctx)) {
       await ctx.reply('TreaderBooom Admin Bot. This account is not on the administrator allowlist.');
@@ -123,80 +179,148 @@ if (BOT_TOKEN) {
     }
     await ctx.reply('TreaderBooom Control Center\nChoose a section below.', mainKeyboard());
   });
+
   bot.command('panel', adminOnly, ctx => ctx.reply('TreaderBooom Control Center', mainKeyboard()));
   bot.command('help', adminOnly, ctx => ctx.reply(
-    'Admin commands:\n/panel — open control panel\n/status — app status\n/pause — pause new demo trades\n/resume — resume demo trades\n/duration 60 — set trade duration in seconds\n/multiplier 1.8 — set demo payout multiplier\n/broadcast Your message — send announcement to known Mini App users\n\nBot token belongs in .env, never in frontend HTML.'
+    'Admin commands:\n/panel — open control panel\n/status — app status\n/broadcast Your message — send announcement'
   ));
   bot.command('status', adminOnly, ctx => ctx.reply(statusText()));
-  bot.command('pause', adminOnly, async ctx => { config.tradingEnabled = false; saveConfig(); await ctx.reply('New trades paused.', mainKeyboard()); });
-  bot.command('resume', adminOnly, async ctx => { config.tradingEnabled = true; saveConfig(); await ctx.reply('New trades enabled.', mainKeyboard()); });
-  bot.command('duration', adminOnly, async ctx => {
-    const n = Number(ctx.message.text.split(/\s+/)[1]);
-    if (!Number.isInteger(n) || n < 5 || n > 3600) return ctx.reply('Use /duration 60 (5–3600 seconds).');
-    config.tradeDuration = n; saveConfig(); ctx.reply(`Trade duration set to ${n} seconds.`);
-  });
-  bot.command('multiplier', adminOnly, async ctx => {
-    const n = Number(ctx.message.text.split(/\s+/)[1]);
-    if (!Number.isFinite(n) || n < 1 || n > 10) return ctx.reply('Use /multiplier 1.8 (allowed demo range 1–10).');
-    config.multiplier = n; saveConfig(); ctx.reply(`Demo multiplier set to x${n}.`);
-  });
+
+  // Broadcast Command
   bot.command('broadcast', adminOnly, async ctx => {
     const message = ctx.message.text.replace(/^\/broadcast(?:@\w+)?\s*/, '').trim();
     if (!message) return ctx.reply('Usage: /broadcast Your announcement text');
     let sent = 0, failed = 0;
     for (const id of Object.keys(users)) {
       if (users[id].blocked) continue;
-      try { await bot.telegram.sendMessage(id, `TreaderBooom announcement\n\n${message}`); sent++; }
+      try { await bot.telegram.sendMessage(id, `📢 **Announcement**\n\n${message}`); sent++; }
       catch { failed++; }
     }
     ctx.reply(`Broadcast finished. Sent: ${sent}; failed: ${failed}.`);
   });
 
   function statusText() {
-    return `TreaderBooom status\nTrading: ${config.tradingEnabled ? 'ENABLED' : 'PAUSED'}\nDuration: ${config.tradeDuration}s\nDemo multiplier: x${config.multiplier}\nCancel enabled: ${config.cancelEnabled ? 'Yes' : 'No'}\nRegistered Telegram users: ${Object.keys(users).length}\nRecorded events: ${events.length}`;
+    return `📊 **TreaderBooom Status**\nTrading: ${config.tradingEnabled ? 'ENABLED' : 'PAUSED'}\nRegistered Users: ${Object.keys(users).length}\nPending Deposits: ${deposits.filter(d => d.status === 'pending').length}`;
   }
+
   bot.action('dashboard', async ctx => { await ctx.answerCbQuery(); await ctx.editMessageText(statusText(), mainKeyboard()); });
+  
+  // Pending Deposits Management in Telegram Bot
+  bot.action('pending_deposits', async ctx => {
+    await ctx.answerCbQuery();
+    const pending = deposits.filter(d => d.status === 'pending');
+    if (!pending.length) {
+      return ctx.editMessageText('No pending deposits found.', Markup.inlineKeyboard([[Markup.button.callback('Back to panel', 'back')]]));
+    }
+    const item = pending[0];
+    await ctx.editMessageText(
+      `📥 **Deposit Request**\n\nUser: ${item.userName} (\`${item.userId}\`)\nAmount: **${item.amount} USDT**\nTxID: \`${item.txid}\`\nDate: ${item.at}`,
+      Markup.inlineKeyboard([
+        [Markup.button.callback('✅ Approve Deposit', `approve_dep_${item.id}`), Markup.button.callback('❌ Reject Deposit', `reject_dep_${item.id}`)],
+        [Markup.button.callback('Back to panel', 'back')]
+      ])
+    );
+  });
+
+  // Approve Deposit Action
+  bot.action(/^approve_dep_(.+)$/, async ctx => {
+    await ctx.answerCbQuery('Processing approval...');
+    const depId = ctx.match[1];
+    const dep = deposits.find(d => d.id === depId);
+    if (!dep || dep.status !== 'approved') {
+      if (dep) {
+        dep.status = 'approved';
+        if (users[dep.userId]) {
+          users[dep.userId].balance = (users[dep.userId].balance || 0) + dep.amount;
+          saveUsers();
+        }
+        saveDeposits();
+        try { await bot.telegram.sendMessage(dep.userId, `✅ Your deposit of ${dep.amount} USDT has been approved and added to your balance!`); } catch {}
+      }
+    }
+    await ctx.editMessageText('Deposit approved successfully!', Markup.inlineKeyboard([[Markup.button.callback('Back to panel', 'back')]]));
+  });
+
+  // Reject Deposit Action
+  bot.action(/^reject_dep_(.+)$/, async ctx => {
+    await ctx.answerCbQuery('Rejecting...');
+    const depId = ctx.match[1];
+    const dep = deposits.find(d => d.id === depId);
+    if (dep) {
+      dep.status = 'rejected';
+      saveDeposits();
+      try { await bot.telegram.sendMessage(dep.userId, `❌ Your deposit request of ${dep.amount} USDT was rejected by admin.`); } catch {}
+    }
+    await ctx.editMessageText('Deposit rejected.', Markup.inlineKeyboard([[Markup.button.callback('Back to panel', 'back')]]));
+  });
+
+  // User Management Menu
+  bot.action('users_mgmt', async ctx => {
+    await ctx.answerCbQuery();
+    const totalUsers = Object.keys(users).length;
+    await ctx.editMessageText(
+      `👥 **User Management**\nTotal Registered Users: ${totalUsers}\n\nUse user controls to view or manage status.`,
+      Markup.inlineKeyboard([
+        [Markup.button.callback('View Recent Users', 'list_users')],
+        [Markup.button.callback('Back to panel', 'back')]
+      ])
+    );
+  });
+
+  bot.action('list_users', async ctx => {
+    await ctx.answerCbQuery();
+    const list = Object.values(users).slice(-10).reverse();
+    const body = list.length ? list.map(u => `${u.blocked ? '[BLOCKED] ' : ''}${u.firstName} (ID: ${u.id}) - Bal: ${u.balance || 0} USDT`).join('\n') : 'No users found.';
+    await ctx.editMessageText(`Recent Users:\n\n${body}`, Markup.inlineKeyboard([[Markup.button.callback('Back', 'users_mgmt')]]));
+  });
+
+  // Gift Codes Management Menu
+  bot.action('gift_codes_menu', async ctx => {
+    await ctx.answerCbQuery();
+    await ctx.editMessageText(
+      `🎁 **Gift Codes Management**\nActive Gift Codes: ${giftCodes.length}\n\nTo generate a gift code via command or manage them, use your custom admin logic.`,
+      Markup.inlineKeyboard([
+        [Markup.button.callback('List Gift Codes', 'list_gift_codes')],
+        [Markup.button.callback('Back to panel', 'back')]
+      ])
+    );
+  });
+
+  bot.action('list_gift_codes', async ctx => {
+    await ctx.answerCbQuery();
+    const body = giftCodes.length ? giftCodes.map(g => `Code: \`${g.code}\` — ${g.amount} USDT`).join('\n') : 'No gift codes created yet.';
+    await ctx.editMessageText(`Gift Codes:\n\n${body}`, Markup.inlineKeyboard([[Markup.button.callback('Back', 'gift_codes_menu')]]));
+  });
+
+  bot.action('withdrawals_list', async ctx => {
+    await ctx.answerCbQuery();
+    const body = withdrawals.length ? withdrawals.slice(-10).map(w => `User ${w.userId}: ${w.amount} USDT [${w.status}]`).join('\n') : 'No withdrawal records.';
+    await ctx.editMessageText(`Withdrawal History:\n\n${body}`, Markup.inlineKeyboard([[Markup.button.callback('Back to panel', 'back')]]));
+  });
+
   bot.action('controls', async ctx => {
     await ctx.answerCbQuery();
-    await ctx.editMessageText('App controls\nChoose a setting:', Markup.inlineKeyboard([
-      [Markup.button.callback(config.tradingEnabled ? 'Pause new trades' : 'Resume new trades', 'toggle_trading')],
-      [Markup.button.callback(`Trade cancellation: ${config.cancelEnabled ? 'ON' : 'OFF'}`, 'toggle_cancel')],
-      [Markup.button.callback(`Announcements: ${config.announcementsEnabled ? 'ON' : 'OFF'}`, 'toggle_announcements')],
+    await ctx.editMessageText('App controls:', Markup.inlineKeyboard([
+      [Markup.button.callback(config.tradingEnabled ? 'Pause trading' : 'Resume trading', 'toggle_trading')],
       [Markup.button.callback('Back to panel', 'back')]
     ]));
   });
-  bot.action('toggle_trading', async ctx => { config.tradingEnabled = !config.tradingEnabled; saveConfig(); await ctx.answerCbQuery(config.tradingEnabled ? 'Trading enabled' : 'Trading paused'); await ctx.editMessageText(statusText(), mainKeyboard()); });
-  bot.action('toggle_cancel', async ctx => { config.cancelEnabled = !config.cancelEnabled; saveConfig(); await ctx.answerCbQuery('Updated'); await ctx.editMessageText(`Trade cancellation is now ${config.cancelEnabled ? 'ON' : 'OFF'}.`, Markup.inlineKeyboard([[Markup.button.callback('Back to controls', 'controls')],[Markup.button.callback('Main panel', 'back')]])); });
-  bot.action('toggle_announcements', async ctx => { config.announcementsEnabled = !config.announcementsEnabled; saveConfig(); await ctx.answerCbQuery('Updated'); await ctx.editMessageText(`Announcements are now ${config.announcementsEnabled ? 'ON' : 'OFF'}.`, mainKeyboard()); });
-  bot.action('trade_settings', async ctx => {
-    await ctx.answerCbQuery();
-    await ctx.editMessageText(`Trade settings\nDuration: ${config.tradeDuration}s\nDemo multiplier: x${config.multiplier}\nMinimum stake: ${config.minStake}\nMaximum stake: ${config.maxStakePercent}% of displayed balance\n\nUse commands:\n/duration 60\n/multiplier 1.8`, Markup.inlineKeyboard([[Markup.button.callback('Back to panel', 'back')]]));
+
+  bot.action('toggle_trading', async ctx => { 
+    config.tradingEnabled = !config.tradingEnabled; 
+    saveConfig(); 
+    await ctx.answerCbQuery('Updated'); 
+    await ctx.editMessageText(statusText(), mainKeyboard()); 
   });
-  bot.action('messages', async ctx => {
-    await ctx.answerCbQuery();
-    await ctx.editMessageText(`Result message templates (current defaults)\n\nWIN: ${config.resultWinMessage}\n\nLOSS: ${config.resultLossMessage}\n\nCANCEL: ${config.resultCancelMessage}\n\nTo customize safely, edit data/config.json and restart the service.`, Markup.inlineKeyboard([[Markup.button.callback('Back to panel', 'back')]]));
+
+  bot.action('broadcast_help', async ctx => { 
+    await ctx.answerCbQuery(); 
+    await ctx.reply('Send broadcast using command:\n/broadcast Your message text'); 
   });
-  bot.action('users', async ctx => {
-    await ctx.answerCbQuery();
-    const list = Object.values(users).slice(-20).reverse();
-    const body = list.length ? list.map(u => `${u.blocked ? '[BLOCKED] ' : ''}${u.firstName || 'User'}${u.username ? ' @'+u.username : ''} — ID ${u.id}`).join('\n') : 'No users have opened the Mini App yet.';
-    await ctx.editMessageText(`Users (${Object.keys(users).length} total; showing latest 20)\n\n${body}`, Markup.inlineKeyboard([[Markup.button.callback('Refresh', 'users')],[Markup.button.callback('Back to panel', 'back')]]));
-  });
-  bot.action('events', async ctx => {
-    await ctx.answerCbQuery();
-    const recent = events.slice(-15).reverse();
-    const body = recent.length ? recent.map(e => `${e.at} | user ${e.id} | ${e.type}`).join('\n') : 'No events recorded yet.';
-    await ctx.editMessageText(`Recent app events\n\n${body}`, Markup.inlineKeyboard([[Markup.button.callback('Refresh', 'events')],[Markup.button.callback('Back to panel', 'back')]]));
-  });
-  bot.action('broadcast_help', async ctx => { await ctx.answerCbQuery(); await ctx.reply('Send an announcement using:\n/broadcast Your announcement text\n\nOnly users who have opened the Mini App and whose IDs were recorded can receive it.'); });
-  bot.action('help', async ctx => { await ctx.answerCbQuery(); await ctx.reply('/panel /status /pause /resume /duration 60 /multiplier 1.8 /broadcast Your message'); });
-  bot.action('back', async ctx => { await ctx.answerCbQuery(); await ctx.editMessageText('TreaderBooom Control Center\nChoose a section below.', mainKeyboard()); });
-  bot.catch(err => console.error('Telegram bot error:', err.message));
-  bot.launch().then(() => console.log('Telegram admin bot started.')).catch(err => console.error('Bot launch failed:', err.message));
-} else {
-  console.warn('TELEGRAM_BOT_TOKEN is missing. Admin bot is disabled until configured in .env');
+
+  bot.action('back', async ctx => { await ctx.answerCbQuery(); await ctx.editMessageText('TreaderBooom Control Center', mainKeyboard()); });
+  
+  bot.launch().then(() => console.log('Telegram admin bot started with full management features.')).catch(console.error);
 }
 
-app.listen(PORT, () => console.log(`TreaderBooom server listening on port ${PORT}`));
-process.once('SIGINT', () => { if (bot) bot.stop('SIGINT'); process.exit(0); });
-process.once('SIGTERM', () => { if (bot) bot.stop('SIGTERM'); process.exit(0); });
+app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
